@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-canvas text-ink font-body antialiased;
+}
+
+h1, h2, h3, h4 {
+  @apply font-display;
+}
+
+::selection {
+  background: #D9A94F;
+  color: #1B2E28;
+}
+
+:focus-visible {
+  outline: 2px solid #B8862E;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.eyebrow {
+  @apply text-gold-dark tracking-[0.2em] text-xs font-semibold uppercase;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-md bg-forest px-6 py-3 text-canvas font-semibold hover:bg-forest-light transition-colors;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-md border border-forest px-6 py-3 text-forest font-semibold hover:bg-forest hover:text-canvas transition-colors;
+}
+
+.card {
+  @apply bg-white/70 border border-line rounded-lg p-6;
+}
+
+.input {
+  @apply w-full rounded-md border border-line bg-white px-4 py-2.5 text-ink placeholder:text-ink/40 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-colors;
+}
+
+.label {
+  @apply block text-sm font-medium text-ink/80 mb-1.5;
+}
