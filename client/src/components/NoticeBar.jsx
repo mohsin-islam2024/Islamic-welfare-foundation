@@ -13,7 +13,7 @@ function getDismissedIds() {
 
 export default function NoticeBar() {
   const [notices, setNotices] = useState([]);
-  const [index, setIndex] = useState(0);
+  const [dismissedAll, setDismissedAll] = useState(false);
 
   useEffect(() => {
     api
@@ -25,34 +25,36 @@ export default function NoticeBar() {
       .catch(() => {}); // Fail silently — a missing notice bar shouldn't block the site
   }, []);
 
-  if (notices.length === 0) return null;
+  if (notices.length === 0 || dismissedAll) return null;
 
-  const current = notices[index % notices.length];
-
-  const dismiss = () => {
+  // Dismissing marks every currently-shown notice as seen, then hides the whole bar.
+  const dismissAll = () => {
     const dismissed = getDismissedIds();
-    localStorage.setItem(DISMISSED_KEY, JSON.stringify([...dismissed, current._id]));
-    setNotices((prev) => prev.filter((n) => n._id !== current._id));
+    const ids = notices.map((n) => n._id);
+    localStorage.setItem(DISMISSED_KEY, JSON.stringify([...dismissed, ...ids]));
+    setDismissedAll(true);
   };
 
+  const combinedText = notices
+    .map((n) => (n.body ? `${n.title} — ${n.body}` : n.title))
+    .join("   ৷   ");
+
   return (
-    <div className="bg-gold text-ink">
-      <div className="max-w-6xl mx-auto px-5 py-2.5 flex items-center gap-3 text-sm">
-        <span className="font-semibold shrink-0">📢 {current.title}</span>
-        {current.body && <span className="text-ink/80 truncate">{current.body}</span>}
-        <div className="ml-auto flex items-center gap-3 shrink-0">
-          {notices.length > 1 && (
-            <button
-              onClick={() => setIndex((i) => (i + 1) % notices.length)}
-              className="text-xs font-semibold hover:underline"
-            >
-              পরবর্তী ({index + 1}/{notices.length})
-            </button>
-          )}
-          <button onClick={dismiss} aria-label="বন্ধ করুন" className="text-ink/70 hover:text-ink">
-            ✕
-          </button>
+    <div className="bg-gold text-ink overflow-hidden">
+      <div className="max-w-6xl mx-auto flex items-center gap-3">
+        <span className="shrink-0 pl-5 py-2.5 text-base leading-none">📢</span>
+        <div className="flex-1 min-w-0 overflow-hidden py-2.5">
+          <div className="whitespace-nowrap inline-block animate-notice-marquee font-medium text-sm">
+            {combinedText}
+          </div>
         </div>
+        <button
+          onClick={dismissAll}
+          aria-label="নোটিশ বন্ধ করুন"
+          className="shrink-0 pr-5 py-2.5 text-ink/70 hover:text-ink"
+        >
+          ✕
+        </button>
       </div>
     </div>
   );
