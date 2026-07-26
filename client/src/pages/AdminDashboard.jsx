@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import { PageLoading } from "../components/RouteGuards";
 
-const TABS = ["সারাংশ", "ঋণ আবেদন", "দান", "বার্তা"];
+const TABS = ["সারাংশ", "নোটিশ", "ঋণ আবেদন", "দান", "বার্তা"];
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState(TABS[0]);
@@ -27,6 +27,7 @@ export default function AdminDashboard() {
       </div>
 
       {tab === "সারাংশ" && <SummaryTab />}
+      {tab === "নোটিশ" && <NoticesTab />}
       {tab === "ঋণ আবেদন" && <LoansTab />}
       {tab === "দান" && <DonationsTab />}
       {tab === "বার্তা" && <MessagesTab />}
@@ -61,6 +62,137 @@ function SummaryTab() {
           <p className="text-2xl font-display font-semibold text-forest">{value}</p>
         </div>
       ))}
+    </div>
+  );
+}
+
+const emptyNoticeForm = { title: "", body: "", expiresAt: "" };
+
+function NoticesTab() {
+  const [notices, setNotices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [form, setForm] = useState(emptyNoticeForm);
+  const [creating, setCreating] = useState(false);
+
+  const load = () => {
+    setLoading(true);
+    api.getAllNotices().then(setNotices).catch((e) => setError(e.message)).finally(() => setLoading(false));
+  };
+
+  useEffect(load, []);
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    if (!form.title.trim()) return;
+    setCreating(true);
+    try {
+      const notice = await api.createNotice({
+        title: form.title,
+        body: form.body,
+        expiresAt: form.expiresAt || undefined,
+      });
+      setNotices((prev) => [notice, ...prev]);
+      setForm(emptyNoticeForm);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const toggleActive = async (n) => {
+    try {
+      const updated = await api.updateNotice(n._id, { active: !n.active });
+      setNotices((prev) => prev.map((x) => (x._id === n._id ? updated : x)));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const remove = async (id) => {
+    if (!confirm("এই নোটিশ মুছে ফেলতে চান?")) return;
+    try {
+      await api.deleteNotice(id);
+      setNotices((prev) => prev.filter((n) => n._id !== id));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleCreate} className="card space-y-4 mb-8">
+        <h3 className="font-semibold text-forest">নতুন নোটিশ যোগ করুন</h3>
+        <div>
+          <label className="label" htmlFor="notice-title">শিরোনাম *</label>
+          <input
+            className="input"
+            id="notice-title"
+            value={form.title}
+            onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+            placeholder="যেমন: ঈদের ছুটিতে অফিস বন্ধ থাকবে"
+            required
+          />
+        </div>
+        <div>
+          <label className="label" htmlFor="notice-body">বিস্তারিত (ঐচ্ছিক)</label>
+          <textarea
+            className="input"
+            id="notice-body"
+            rows={2}
+            value={form.body}
+            onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
+          />
+        </div>
+        <div>
+          <label className="label" htmlFor="notice-expiry">মেয়াদ শেষের তারিখ (ঐচ্ছিক)</label>
+          <input
+            className="input"
+            id="notice-expiry"
+            type="date"
+            value={form.expiresAt}
+            onChange={(e) => setForm((f) => ({ ...f, expiresAt: e.target.value }))}
+          />
+          <p className="text-xs text-ink/50 mt-1">খালি রাখলে নোটিশ ম্যানুয়ালি বন্ধ না করা পর্যন্ত দেখানো হবে।</p>
+        </div>
+        <button type="submit" className="btn-primary" disabled={creating}>
+          {creating ? "যোগ হচ্ছে..." : "নোটিশ প্রকাশ করুন"}
+        </button>
+      </form>
+
+      {loading && <PageLoading />}
+      {error && <p className="text-clay text-sm">{error}</p>}
+      {!loading && notices.length === 0 && <p className="text-ink/50">কোনো নোটিশ নেই।</p>}
+
+      <div className="space-y-3">
+        {notices.map((n) => (
+          <div key={n._id} className={`card flex flex-wrap items-start justify-between gap-3 ${!n.active ? "opacity-50" : ""}`}>
+            <div>
+              <div className="flex items-center gap-2">
+                <h4 className="font-semibold text-forest">{n.title}</h4>
+                <span className={`text-xs px-2 py-0.5 rounded-full ${n.active ? "bg-forest/15 text-forest" : "bg-ink/10 text-ink/50"}`}>
+                  {n.active ? "সক্রিয়" : "নিষ্ক্রিয়"}
+                </span>
+              </div>
+              {n.body && <p className="text-sm text-ink/60 mt-1">{n.body}</p>}
+              {n.expiresAt && (
+                <p className="text-xs text-ink/40 mt-1">
+                  মেয়াদ শেষ: {new Date(n.expiresAt).toLocaleDateString("bn-BD")}
+                </p>
+              )}
+            </div>
+            <div className="flex gap-3 shrink-0">
+              <button onClick={() => toggleActive(n)} className="text-xs font-semibold text-forest hover:underline">
+                {n.active ? "বন্ধ করুন" : "চালু করুন"}
+              </button>
+              <button onClick={() => remove(n._id)} className="text-xs font-semibold text-clay hover:underline">
+                মুছুন
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

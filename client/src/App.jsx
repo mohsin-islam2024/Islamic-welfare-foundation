@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import NoticeBar from "./components/NoticeBar";
 import { RequireAuth, RequireAdmin } from "./components/RouteGuards";
 
 import Home from "./pages/Home";
@@ -18,6 +19,7 @@ import NotFound from "./pages/NotFound";
 export default function App() {
   return (
     <div className="flex flex-col min-h-screen">
+      <NoticeBar />
       <Navbar />
       <main className="flex-1">
         <Routes>

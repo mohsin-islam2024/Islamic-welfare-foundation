@@ -31,6 +31,14 @@ export const api = {
   // Public
   submitDonation: (payload) => request("/api/donations", { method: "POST", body: payload }),
   submitContact: (payload) => request("/api/contact", { method: "POST", body: payload }),
+  getActiveNotices: () => request("/api/notices"),
+
+  // Admin only — notices
+  getAllNotices: () => request("/api/notices/all", { auth: true }),
+  createNotice: (payload) => request("/api/notices", { method: "POST", body: payload, auth: true }),
+  updateNotice: (id, payload) =>
+    request(`/api/notices/${id}`, { method: "PATCH", body: payload, auth: true }),
+  deleteNotice: (id) => request(`/api/notices/${id}`, { method: "DELETE", auth: true }),
 
   // Requires login
   submitLoanApplication: (payload) =>

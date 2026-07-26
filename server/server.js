@@ -10,6 +10,7 @@ import donationRoutes from "./routes/donations.js";
 import loanRoutes from "./routes/loans.js";
 import contactRoutes from "./routes/contact.js";
 import adminRoutes from "./routes/admin.js";
+import noticeRoutes from "./routes/notices.js";
 
 dotenv.config();
 
@@ -55,6 +56,7 @@ app.use("/api/donations", donationRoutes);
 app.use("/api/loans", loanRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/notices", noticeRoutes);
 
 // --- 404 handler ---
 app.use((req, res) => {
