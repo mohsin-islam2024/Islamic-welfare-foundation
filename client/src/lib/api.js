@@ -40,6 +40,12 @@ export const api = {
     request(`/api/notices/${id}`, { method: "PATCH", body: payload, auth: true }),
   deleteNotice: (id) => request(`/api/notices/${id}`, { method: "DELETE", auth: true }),
 
+  // Live chat
+  startChat: (payload) => request("/api/chat/start", { method: "POST", body: payload }),
+  getChatMessages: (conversationId) => request(`/api/chat/${conversationId}/messages`),
+  getConversations: () => request("/api/chat/conversations", { auth: true }),
+  closeConversation: (id) => request(`/api/chat/conversations/${id}/close`, { method: "PATCH", auth: true }),
+
   // Requires login
   submitLoanApplication: (payload) =>
     request("/api/loans", { method: "POST", body: payload, auth: true }),

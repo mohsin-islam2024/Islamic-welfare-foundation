@@ -1,4 +1,5 @@
 import express from "express";
+import http from "http";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -11,6 +12,8 @@ import loanRoutes from "./routes/loans.js";
 import contactRoutes from "./routes/contact.js";
 import adminRoutes from "./routes/admin.js";
 import noticeRoutes from "./routes/notices.js";
+import chatRoutes from "./routes/chat.js";
+import { initSocket } from "./socket.js";
 
 dotenv.config();
 
@@ -45,7 +48,7 @@ const publicLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-app.use(["/api/donations", "/api/loans", "/api/contact"], publicLimiter);
+app.use(["/api/donations", "/api/loans", "/api/contact", "/api/chat"], publicLimiter);
 
 // --- Routes ---
 app.get("/api/health", (req, res) => {
@@ -57,6 +60,7 @@ app.use("/api/loans", loanRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/notices", noticeRoutes);
+app.use("/api/chat", chatRoutes);
 
 // --- 404 handler ---
 app.use((req, res) => {
@@ -70,9 +74,11 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
+const httpServer = http.createServer(app);
+initSocket(httpServer, allowedOrigins);
 
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  httpServer.listen(PORT, () => {
     console.log(`Al-Falah Foundation API running on port ${PORT}`);
   });
 });

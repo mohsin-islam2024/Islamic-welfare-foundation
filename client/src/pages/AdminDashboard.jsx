@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "../lib/api";
+import { socket } from "../lib/socket";
+import { useAuth } from "../context/AuthContext";
 import { PageLoading } from "../components/RouteGuards";
 
-const TABS = ["সারাংশ", "নোটিশ", "ঋণ আবেদন", "দান", "বার্তা"];
+const TABS = ["সারাংশ", "লাইভ চ্যাট", "নোটিশ", "ঋণ আবেদন", "দান", "বার্তা"];
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState(TABS[0]);
@@ -27,10 +29,181 @@ export default function AdminDashboard() {
       </div>
 
       {tab === "সারাংশ" && <SummaryTab />}
+      {tab === "লাইভ চ্যাট" && <ChatAdminTab />}
       {tab === "নোটিশ" && <NoticesTab />}
       {tab === "ঋণ আবেদন" && <LoansTab />}
       {tab === "দান" && <DonationsTab />}
       {tab === "বার্তা" && <MessagesTab />}
+    </div>
+  );
+}
+
+function ChatAdminTab() {
+  const { user } = useAuth();
+  const [conversations, setConversations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [activeId, setActiveId] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [text, setText] = useState("");
+  const bottomRef = useRef(null);
+
+  const activeConv = conversations.find((c) => c._id === activeId);
+
+  // Authenticate this socket as an admin, then load the conversation list
+  useEffect(() => {
+    if (!socket.connected) socket.connect();
+
+    user.getIdToken().then((token) => {
+      socket.emit("admin_join", token);
+    });
+
+    api
+      .getConversations()
+      .then(setConversations)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, [user]);
+
+  // Live updates: new messages append to the open thread; conversation list re-sorts on any update
+  useEffect(() => {
+    const handleNewMessage = (message) => {
+      setMessages((prev) =>
+        message.conversation === activeId && !prev.some((m) => m._id === message._id)
+          ? [...prev, message]
+          : prev
+      );
+    };
+    const handleConvUpdated = (conv) => {
+      setConversations((prev) => {
+        const exists = prev.some((c) => c._id === conv._id);
+        const next = exists ? prev.map((c) => (c._id === conv._id ? conv : c)) : [conv, ...prev];
+        return [...next].sort((a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt));
+      });
+    };
+
+    socket.on("new_message", handleNewMessage);
+    socket.on("conversation_updated", handleConvUpdated);
+    return () => {
+      socket.off("new_message", handleNewMessage);
+      socket.off("conversation_updated", handleConvUpdated);
+    };
+  }, [activeId]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const openConversation = async (id) => {
+    setActiveId(id);
+    socket.emit("admin_join_conversation", id);
+    try {
+      const data = await api.getChatMessages(id);
+      setMessages(data.messages);
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+
+  const sendReply = (e) => {
+    e.preventDefault();
+    if (!text.trim() || !activeId) return;
+    socket.emit("admin_message", { conversationId: activeId, text: text.trim() });
+    setText("");
+  };
+
+  const closeConversation = async () => {
+    if (!activeId || !confirm("এই কথোপকথন বন্ধ করতে চান?")) return;
+    try {
+      const updated = await api.closeConversation(activeId);
+      setConversations((prev) => prev.map((c) => (c._id === activeId ? updated : c)));
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+
+  if (loading) return <PageLoading />;
+  if (error) return <p className="text-clay text-sm">{error}</p>;
+
+  return (
+    <div className="grid md:grid-cols-[280px_1fr] gap-5 h-[560px]">
+      <div className="border border-line rounded-lg overflow-y-auto bg-white">
+        {conversations.length === 0 && (
+          <p className="text-ink/50 text-sm p-4">এখনো কোনো চ্যাট নেই।</p>
+        )}
+        {conversations.map((c) => (
+          <button
+            key={c._id}
+            onClick={() => openConversation(c._id)}
+            className={`w-full text-left px-4 py-3 border-b border-line/60 hover:bg-canvas transition-colors ${
+              activeId === c._id ? "bg-gold/10" : ""
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-semibold text-sm text-forest truncate">{c.visitorName}</span>
+              {c.unreadByAdmin > 0 && (
+                <span className="shrink-0 bg-clay text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                  {c.unreadByAdmin}
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-ink/50 truncate mt-0.5">{c.lastMessagePreview || "—"}</p>
+            <p className="text-[10px] text-ink/35 mt-1">
+              {c.status === "closed" ? "বন্ধ" : "সচল"} · {new Date(c.lastMessageAt).toLocaleString("bn-BD")}
+            </p>
+          </button>
+        ))}
+      </div>
+
+      <div className="border border-line rounded-lg bg-white flex flex-col overflow-hidden">
+        {!activeConv ? (
+          <div className="flex-1 flex items-center justify-center text-ink/40 text-sm">
+            বাম দিক থেকে একটা কথোপকথন নির্বাচন করুন
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-between px-4 py-3 border-b border-line shrink-0">
+              <div>
+                <p className="font-semibold text-forest text-sm">{activeConv.visitorName}</p>
+                {activeConv.visitorEmail && <p className="text-xs text-ink/50">{activeConv.visitorEmail}</p>}
+              </div>
+              {activeConv.status !== "closed" && (
+                <button onClick={closeConversation} className="text-xs font-semibold text-clay hover:underline">
+                  কথোপকথন বন্ধ করুন
+                </button>
+              )}
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-canvas/50">
+              {messages.map((m) => (
+                <div key={m._id} className={`flex ${m.sender === "admin" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${
+                      m.sender === "admin"
+                        ? "bg-forest text-canvas rounded-br-none"
+                        : "bg-white border border-line text-ink rounded-bl-none"
+                    }`}
+                  >
+                    {m.text}
+                  </div>
+                </div>
+              ))}
+              <div ref={bottomRef} />
+            </div>
+            <form onSubmit={sendReply} className="border-t border-line p-3 flex gap-2 shrink-0">
+              <input
+                className="input flex-1"
+                placeholder="উত্তর লিখুন..."
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                disabled={activeConv.status === "closed"}
+              />
+              <button type="submit" className="btn-primary !px-4" disabled={activeConv.status === "closed"}>
+                পাঠান
+              </button>
+            </form>
+          </>
+        )}
+      </div>
     </div>
   );
 }

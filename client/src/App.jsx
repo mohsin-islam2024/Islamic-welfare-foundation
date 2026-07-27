@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import NoticeBar from "./components/NoticeBar";
+import ChatWidget from "./components/ChatWidget";
 import { RequireAuth, RequireAdmin } from "./components/RouteGuards";
 
 import Home from "./pages/Home";
@@ -60,6 +61,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <ChatWidget />
     </div>
   );
 }
