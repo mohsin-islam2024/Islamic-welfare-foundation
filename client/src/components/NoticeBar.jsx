@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 
-const DISMISSED_KEY = "alfalah_dismissed_notices";
+const DISMISSED_KEY = "alinfaq_dismissed_notices";
 
 function getDismissedIds() {
   try {

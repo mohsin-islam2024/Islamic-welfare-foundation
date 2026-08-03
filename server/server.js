@@ -52,7 +52,7 @@ app.use(["/api/donations", "/api/loans", "/api/contact", "/api/chat"], publicLim
 
 // --- Routes ---
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", service: "al-falah-foundation-api" });
+  res.json({ status: "ok", service: "al-infaq-foundation-api" });
 });
 
 app.use("/api/donations", donationRoutes);
@@ -79,6 +79,6 @@ initSocket(httpServer, allowedOrigins);
 
 connectDB().then(() => {
   httpServer.listen(PORT, () => {
-    console.log(`Al-Falah Foundation API running on port ${PORT}`);
+    console.log(`AL-INFAQ FOUNDATION API running on port ${PORT}`);
   });
 });

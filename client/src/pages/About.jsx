@@ -11,9 +11,9 @@ export default function About() {
   return (
     <div className="max-w-4xl mx-auto px-5 py-16">
       <p className="eyebrow mb-3">আমাদের সম্পর্কে</p>
-      <h1 className="text-4xl font-semibold text-forest mb-6">আল-ফালাহ ফাউন্ডেশন</h1>
+      <h1 className="text-4xl font-semibold text-forest mb-6">আল-ইনফাক ফাউন্ডেশন</h1>
       <p className="text-ink/70 leading-relaxed text-lg mb-10">
-        আল-ফালাহ ফাউন্ডেশন একটি ইসলামিক সামাজিক কল্যাণ সংস্থা, যার প্রধান লক্ষ্য আল্লাহর সন্তুষ্টি
+        আল-ইনফাক ফাউন্ডেশন একটি ইসলামিক সামাজিক কল্যাণ সংস্থা, যার প্রধান লক্ষ্য আল্লাহর সন্তুষ্টি
         অর্জনের উদ্দেশ্যে মানবকল্যাণমূলক কার্যক্রম পরিচালনা করা। দলীয় রাজনীতি থেকে সম্পূর্ণ নিরপেক্ষ থেকে
         আমরা দরিদ্র ও অসহায় মানুষের পাশে দাঁড়াই।
       </p>

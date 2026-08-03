@@ -1,4 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#1B4332"/>
-  <path d="M32 14 L38 26 L51 28 L41.5 37 L44 50 L32 43.5 L20 50 L22.5 37 L13 28 L26 26 Z" fill="#D9A94F"/>
+<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#146357"/>
+      <stop offset="100%" stop-color="#0C4038"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="320" height="320" rx="86" fill="url(#teal)"/>
+
+  <g transform="translate(160,160)">
+    <path d="M 0,78 C -54,64 -60,-14 -8,-82
+             C 48,-44 60,46 0,78 Z"
+          fill="#F4EFE4"/>
+    <path d="M 0,60 C -6,20 -4,-30 6,-64" stroke="#146357" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.55"/>
+    <circle cx="0" cy="88" r="9" fill="#C9973B"/>
+
+    <g stroke="#F4EFE4" stroke-width="6" stroke-linecap="round" fill="none">
+      <line x1="-72.3" y1="9.5" x2="-108.5" y2="21.3"/>
+      <line x1="-72.3" y1="-37.5" x2="-108.5" y2="-49.3"/>
+      <line x1="-44.6" y1="-75.5" x2="-67.0" y2="-106.3"/>
+      <line x1="0" y1="-90" x2="0" y2="-128"/>
+      <line x1="44.6" y1="-75.5" x2="67.0" y2="-106.3"/>
+      <line x1="72.3" y1="-37.5" x2="108.5" y2="-49.3"/>
+      <line x1="72.3" y1="9.5" x2="108.5" y2="21.3"/>
+    </g>
+  </g>
 </svg>

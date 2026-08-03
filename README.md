@@ -1,4 +1,4 @@
-# আল-ফালাহ ফাউন্ডেশন — ওয়েবসাইট
+# আল-ইনফাক ফাউন্ডেশন — ওয়েবসাইট
 
 MERN স্ট্যাক (MongoDB, Express, React, Node.js) দিয়ে তৈরি ফাউন্ডেশনের ওয়েবসাইট।
 অথেনটিকেশনের জন্য **Firebase Authentication** এবং ফ্রন্টএন্ড ডিপ্লয়মেন্টের জন্য **Netlify** ব্যবহার করা হয়েছে।
@@ -16,7 +16,7 @@ MERN স্ট্যাক (MongoDB, Express, React, Node.js) দিয়ে �
 ## প্রজেক্ট কাঠামো
 
 ```
-al-falah-foundation/
+al-infaq-foundation/
 ├── client/          # React + Vite ফ্রন্টএন্ড (Netlify-তে ডিপ্লয় হবে)
 ├── server/          # Express + MongoDB ব্যাকএন্ড API (Render-এ ডিপ্লয় হবে)
 └── netlify.toml     # Netlify বিল্ড কনফিগারেশন
@@ -46,36 +46,15 @@ Netlify মূলত স্ট্যাটিক ফ্রন্টএন্ড 
 4. **Network Access** এ গিয়ে `0.0.0.0/0` (Allow access from anywhere) যোগ করুন — Render থেকে সংযোগ করতে হলে এটি দরকার।
 5. **Connect > Drivers** থেকে connection string কপি করুন। এটি দেখতে হবে এমন:
    ```
-   mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/alfalah?retryWrites=true&w=majority
-
-   mongodb+srv://mohsinislam629_db_user:T3BHUuv21mUSLDUm@cluster0.x5sssth.mongodb.net/alfalah?retryWrites=true&w=majority&appName=Cluster0
+   mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/alinfaq?retryWrites=true&w=majority
    ```
 
 ## ধাপ ২: Firebase প্রজেক্ট সেটআপ
 
-1. [console.firebase.google.com](https://console.firebase.google.com) এ গিয়ে নতুন প্রজেক্ট তৈরি করুন (যেমন `al-falah-foundation`)।
+1. [console.firebase.google.com](https://console.firebase.google.com) এ গিয়ে নতুন প্রজেক্ট তৈরি করুন (যেমন `al-infaq-foundation`)।
 2. **Authentication > Sign-in method** এ গিয়ে **Email/Password** এবং **Google** — দুটোই চালু করুন।
 3. **Project settings > General > Your apps** এ গিয়ে একটি **Web app** যোগ করুন। এখান থেকে যে config অবজেক্ট পাবেন (`apiKey`, `authDomain`, ইত্যাদি) — এগুলো `client/.env` ফাইলে লাগবে।
-
-  apiKey: "AIzaSyDst9TIV1JpQYQA4u2M3v2mo6jYeCYrDXQ",
-  authDomain: "islamic-welfare-foundation.firebaseapp.com",
-  projectId: "islamic-welfare-foundation",
-  storageBucket: "islamic-welfare-foundation.firebasestorage.app",
-  messagingSenderId: "796254139540",
-  appId: "1:796254139540:web:d862de246726810b64b081"
-
-
-
-
-
-
-
 4. **Project settings > Service accounts** এ গিয়ে **Generate new private key** ক্লিক করুন। যে JSON ফাইল ডাউনলোড হবে, তার পুরো কনটেন্ট এক লাইনে `server/.env` ফাইলের `FIREBASE_SERVICE_ACCOUNT` ভ্যারিয়েবলে বসবে।
-
-
-{"type": "service_account","project_id": "islamic-welfare-foundation","private_key_id": "cffd0a9f6d9511539f076e6657039653d33383c9","private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDxu91l30HbDfZX\nkGWkwsL7Ta/XYrM80hy59QXbjR8Azfmi6yv7Dx8fgJkAdle6cM3UrbLJ01YVCv6d\nXsQUFg1R05BatNGvkoVo+XlOJe9Q1DxbelAghmOGEJGe9riVxJLVMcYZkviQCCgh\nNuLst1FJZwngO95YcTQjBieEKOtKk+IGHWZ9RiGLcmPm7RBub0clJf8WkZg3lAz0\nrOvFc2LQ7I6xyykzOLH+PeuJwQVvRqGpDf8LIKlFVZnHS9yLYoKTeolH/gCsdnWd\ny6f95Gzb7mg24JIwfPhkF4+uXXqv4OwYNpX1fjzh1G0jQ4QmV7joRIjAC1Os4fVh\nxYGclVkTAgMBAAECggEANmOQDV89qIVMM2h0Ti1aBIP2t+3nqRwXRYnJLxxh6OLv\nM4ZZR2wgEwzyn+WAmJzP2vXX/8wSlrp6Djtnv6M0jQAefyIm+atsY/GZpwkm/tc5\n21U6WQ8TrnLk6NDXOC9Z4CkKSu/ECFgle0+noB4g5nSOBstBnEGgOu8kDfrM8eLD\nKxXn9GQnUftF3mkmXQMVbOJtcVjY2CLQEubnA6wl5KD+MNCWret92gbhot40jkFh\nCpoBac2WfXjStY9QC6vCaK1KmUfVO3nqwQRKw2nVaIEP9d1tg61AzA6fCXab83k/\n0UanZNM3lHaKYXoQcXNn9GJnv/Ra7i/YWFlVhz0hRQKBgQD5MklUA/5mNPEOmAJD\nA3USxH08+2mBFgjHD7776Jzuf9l8H8vYtXif4Yi1br5k6vWz8Y/ivc9GbVrJyTVL\nAUVYhiUwg7JIQpAgx3ToBEyvHGFl4X87C+8nj3pZWxgQOGBpDb7308arUxX4hGzi\nT6wjCdxGwuzU52mTZk60ZBtFdwKBgQD4VWuFq0UdgS+o8VtyLFJUzxRFSGLhfmpK\nrqZkjgp8HaKZ1/nAECDl9lOqGaiplrqVeFB1fW8+CW2Bm85M8hFSkMw9hphcfUFB\nv+7zcFMSa/lwdQFyn7FJAhxSILitts5l4dwecLM2aqyGLCACxBrj0M6idXcgU1dn\nj4AKOglgRQKBgEQS76Mq4CEtjzhsYBnMZPv2fzvcdkrUKRuv+n04Yz5n4JKe4QHX\nORd79euSUCKjaPF6KNNJBMl5cBa1h4Bw3W+8XYZuQ5Kn1FWQByimnAguGZFKU4Ze\n0TseX87vKpirvfKU1bk/ugLtVJAqJNCB8UU1GV6fOzFB8j5Y8WEoA6crAoGBAJKN\nNosH7B3hY1L8PM9AQMYz/u50LYaNqASy1Rd6i817X74Sqx0hZ4jOuckko1iRz0Lu\nYe00PTYLMkjOvgzCvl5PfXjBuaC7eotmzYl0vFGezvIC2vveKi2/xR7imJpLy7ps\ndA6yy9BNW8tCtxFq0cOoMonFcKvvAyHmmdVvMqFRAoGBANHpBQ2WpGrTPy995+v/\n9yHLiBTSrGy9oCTidDYR+Bu4PdfykJbeCH0Hz8HsIFR9cpolKpPY3+SbTP0DaVcy\nbQASvUgB5ayGBpziNpKiX99II4rCLg8n23LaRLXLXiC37PtwVItmFiBmGYLvMGgI\nxzxsNJyutnjN5/QoX2pjo/hT\n-----END PRIVATE KEY-----\n","client_email": "firebase-adminsdk-fbsvc@islamic-welfare-foundation.iam.gserviceaccount.com","client_id": "104300681516786498834","auth_uri": "https://accounts.google.com/o/oauth2/auth","token_uri": "https://oauth2.googleapis.com/token","auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40islamic-welfare-foundation.iam.gserviceaccount.com","universe_domain": "googleapis.com"}
-
-
 
    > টিপস: JSON ফাইলটি এক লাইনে রূপান্তর করতে যেকোনো JSON minifier ব্যবহার করুন, অথবা `node -e "console.log(JSON.stringify(require('./serviceAccountKey.json')))"` কমান্ড চালান।
 
@@ -102,7 +81,7 @@ npm run dev
    - **Start Command:** `npm start`
    - **Instance Type:** Free
 5. **Environment** ট্যাবে গিয়ে `.env.example`-এর সব ভ্যারিয়েবল যোগ করুন (`MONGODB_URI`, `FIREBASE_SERVICE_ACCOUNT`, `ADMIN_EMAILS`, `CLIENT_ORIGINS`)। `CLIENT_ORIGINS`-এ আপাতত `http://localhost:5173` দিন, Netlify ডিপ্লয়ের পর আসল URL যোগ করবেন।
-6. ডিপ্লয় হলে আপনি একটি URL পাবেন, যেমন `https://al-falah-api.onrender.com`। এটি মনে রাখুন — ফ্রন্টএন্ডে লাগবে।
+6. ডিপ্লয় হলে আপনি একটি URL পাবেন, যেমন `https://al-infaq-api.onrender.com`। এটি মনে রাখুন — ফ্রন্টএন্ডে লাগবে।
 
    > ফ্রি টায়ারের সার্ভার কিছুক্ষণ ব্যবহার না হলে "ঘুমিয়ে" যায় এবং প্রথম রিকোয়েস্টে ২০-৩০ সেকেন্ড দেরি হতে পারে — এটাই ফ্রি টায়ারের স্বাভাবিক আচরণ।
 
@@ -128,9 +107,9 @@ npm run dev
    - `VITE_FIREBASE_STORAGE_BUCKET`
    - `VITE_FIREBASE_MESSAGING_SENDER_ID`
    - `VITE_FIREBASE_APP_ID`
-   - `VITE_API_BASE_URL` → আপনার Render backend URL (যেমন `https://al-falah-api.onrender.com`)
+   - `VITE_API_BASE_URL` → আপনার Render backend URL (যেমন `https://al-infaq-api.onrender.com`)
    - `VITE_ADMIN_EMAILS` → অ্যাডমিন ইমেইল(গুলো), কমা দিয়ে আলাদা
-5. Deploy করুন। কিছুক্ষণ পর একটি URL পাবেন, যেমন `https://al-falah-foundation.netlify.app`।
+5. Deploy করুন। কিছুক্ষণ পর একটি URL পাবেন, যেমন `https://al-infaq-foundation.netlify.app`।
 6. এই URL-টি Render-এর `CLIENT_ORIGINS` এনভায়রনমেন্ট ভ্যারিয়েবলে যোগ করে সার্ভার রিডিপ্লয় করুন (CORS ঠিকমতো কাজ করার জন্য)।
 7. Firebase Console-এ **Authentication > Settings > Authorized domains**-এ আপনার Netlify ডোমেইন যোগ করুন (নাহলে লগইন কাজ করবে না)।
 

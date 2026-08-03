@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { api } from "../lib/api";
 import { socket } from "../lib/socket";
 
-const CONV_KEY = "alfalah_chat_conversation_id";
-const NAME_KEY = "alfalah_chat_visitor_name";
+const CONV_KEY = "alinfaq_chat_conversation_id";
+const NAME_KEY = "alinfaq_chat_visitor_name";
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);

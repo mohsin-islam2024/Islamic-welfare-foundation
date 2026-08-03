@@ -1,7 +1,7 @@
 {
-  "name": "al-falah-foundation-server",
+  "name": "al-infaq-foundation-server",
   "version": "1.0.0",
-  "description": "Al-Falah Foundation backend API (Express + MongoDB)",
+  "description": "AL-INFAQ FOUNDATION backend API (Express + MongoDB)",
   "main": "server.js",
   "type": "module",
   "scripts": {

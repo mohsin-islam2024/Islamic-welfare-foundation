@@ -1,0 +1,59 @@
+<svg width="900" height="700" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#146357"/>
+      <stop offset="100%" stop-color="#0C4038"/>
+    </linearGradient>
+    <linearGradient id="antiqueGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E7C878"/>
+      <stop offset="100%" stop-color="#A8792E"/>
+    </linearGradient>
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="700" fill="#FCFBF8"/>
+
+  <!-- Icon: rounded-square container, modern app-icon style -->
+  <rect x="290" y="140" width="320" height="320" rx="86" fill="url(#teal)"/>
+
+  <!-- Signature mark: one continuous sprouting leaf/flame — infaq as -->
+  <!-- a single act of giving that grows. Deliberately reduced to one shape. -->
+  <g transform="translate(450,300)">
+    <path d="M 0,78 C -54,64 -60,-14 -8,-82
+             C 48,-44 60,46 0,78 Z"
+          fill="#F4EFE4"/>
+    <!-- single vein line, the only interior detail -->
+    <path d="M 0,60 C -6,20 -4,-30 6,-64" stroke="#146357" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.55"/>
+    <!-- seed dot at the base -->
+    <circle cx="0" cy="88" r="9" fill="#C9973B"/>
+
+    <!-- seven simple white lines radiating around the leaf -->
+    <g stroke="#F4EFE4" stroke-width="6" stroke-linecap="round" fill="none">
+      <line x1="-72.3" y1="9.5" x2="-108.5" y2="21.3"/>
+      <line x1="-72.3" y1="-37.5" x2="-108.5" y2="-49.3"/>
+      <line x1="-44.6" y1="-75.5" x2="-67.0" y2="-106.3"/>
+      <line x1="0" y1="-90" x2="0" y2="-128"/>
+      <line x1="44.6" y1="-75.5" x2="67.0" y2="-106.3"/>
+      <line x1="72.3" y1="-37.5" x2="108.5" y2="-49.3"/>
+      <line x1="72.3" y1="9.5" x2="108.5" y2="21.3"/>
+    </g>
+  </g>
+
+  <!-- ============ WORDMARK ============ -->
+  <text x="450" y="530" text-anchor="middle" font-family="'Hind Siliguri','Noto Sans Bengali',sans-serif"
+        font-size="48" fill="#0C4038" font-weight="700">আল-ইনফাক ফাউন্ডেশন</text>
+
+  <text x="450" y="578" text-anchor="middle" font-family="'Helvetica Neue',Arial,sans-serif"
+        font-size="24" letter-spacing="8" fill="#C9973B" font-weight="600">AL-INFAQ FOUNDATION</text>
+
+  <!-- divider -->
+  <line x1="405" y1="603" x2="495" y2="603" stroke="#C9973B" stroke-width="2"/>
+
+  <!-- tagline -->
+  <text x="450" y="642" text-anchor="middle" font-family="'Hind Siliguri','Noto Sans Bengali',sans-serif"
+        font-size="22" fill="#0C4038" opacity="0.75">কল্যাণের অভিযাত্রায় একসাথে</text>
+
+</svg>

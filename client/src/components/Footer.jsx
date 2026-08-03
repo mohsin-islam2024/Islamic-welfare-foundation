@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="bg-forest-dark text-canvas/90 mt-20">
       <div className="max-w-6xl mx-auto px-5 py-12 grid gap-10 md:grid-cols-3">
         <div>
-          <h3 className="font-display font-semibold text-lg text-gold-light mb-3">আল-ফালাহ ফাউন্ডেশন</h3>
+          <h3 className="font-display font-semibold text-lg text-gold-light mb-3">আল-ইনফাক ফাউন্ডেশন</h3>
           <p className="text-sm leading-relaxed text-canvas/70">
             আল্লাহর সন্তুষ্টি অর্জনের উদ্দেশ্যে মানবকল্যাণমূলক কার্যক্রম — কর্জে হাসানাহ, চিকিৎসা ও
             শিক্ষা সহায়তা, এতিম ও বিধবা সহায়তা এবং দুর্যোগকালীন ত্রাণ।
@@ -34,7 +34,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-canvas/10 py-5 text-center text-xs text-canvas/50">
-        © {new Date().getFullYear()} আল-ফালাহ ফাউন্ডেশন। সর্বস্বত্ব সংরক্ষিত।
+        © {new Date().getFullYear()} আল-ইনফাক ফাউন্ডেশন। সর্বস্বত্ব সংরক্ষিত।
       </div>
     </footer>
   );

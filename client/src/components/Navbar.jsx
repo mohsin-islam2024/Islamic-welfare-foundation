@@ -25,15 +25,9 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-canvas/90 backdrop-blur border-b border-line">
       <nav className="max-w-6xl mx-auto flex items-center justify-between px-5 py-3.5">
         <Link to="/" className="flex items-center gap-2.5">
-          <svg width="34" height="34" viewBox="0 0 64 64" className="shrink-0">
-            <rect width="64" height="64" rx="14" fill="#1B4332" />
-            <path
-              d="M32 14 L38 26 L51 28 L41.5 37 L44 50 L32 43.5 L20 50 L22.5 37 L13 28 L26 26 Z"
-              fill="#D9A94F"
-            />
-          </svg>
+          <img src="/favicon.svg" alt="আল-ইনফাক ফাউন্ডেশন" className="w-9 h-9 shrink-0" />
           <span className="font-display font-semibold text-lg leading-tight text-forest">
-            আল-ফালাহ
+            আল-ইনফাক
             <span className="block text-[11px] font-body font-normal tracking-wide text-ink/60">
               ফাউন্ডেশন
             </span>
