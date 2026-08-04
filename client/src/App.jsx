@@ -8,6 +8,7 @@ import { RequireAuth, RequireAdmin } from "./components/RouteGuards";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Programs from "./pages/Programs";
+import NoticeBoard from "./pages/NoticeBoard";
 import Donate from "./pages/Donate";
 import LoanApplication from "./pages/LoanApplication";
 import Contact from "./pages/Contact";
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/programs" element={<Programs />} />
+          <Route path="/notice-board" element={<NoticeBoard />} />
           <Route path="/donate" element={<Donate />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />

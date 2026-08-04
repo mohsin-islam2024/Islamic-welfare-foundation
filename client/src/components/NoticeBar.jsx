@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../lib/api";
 
 const DISMISSED_KEY = "alinfaq_dismissed_notices";
@@ -48,6 +49,12 @@ export default function NoticeBar() {
             {combinedText}
           </div>
         </div>
+        <Link
+          to="/notice-board"
+          className="shrink-0 text-xs font-semibold underline decoration-ink/40 hover:decoration-ink whitespace-nowrap"
+        >
+          সব দেখুন
+        </Link>
         <button
           onClick={dismissAll}
           aria-label="নোটিশ বন্ধ করুন"

@@ -6,6 +6,7 @@ const navLinks = [
   { to: "/", label: "প্রচ্ছদ" },
   { to: "/about", label: "আমাদের সম্পর্কে" },
   { to: "/programs", label: "কার্যক্রম" },
+  { to: "/notice-board", label: "নোটিশ বোর্ড" },
   { to: "/loan-application", label: "কর্জে হাসানাহ" },
   { to: "/donate", label: "দান করুন" },
   { to: "/contact", label: "যোগাযোগ" },
