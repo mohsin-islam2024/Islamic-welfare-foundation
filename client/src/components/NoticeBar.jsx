@@ -40,12 +40,19 @@ export default function NoticeBar() {
     .map((n) => (n.body ? `${n.title} — ${n.body}` : n.title))
     .join("   ৷   ");
 
+  // Longer text needs more time to scroll past so it stays readable —
+  // roughly 3.5 characters per second, with sensible floor/ceiling.
+  const duration = Math.min(90, Math.max(28, combinedText.length / 3.5));
+
   return (
     <div className="bg-gold text-ink overflow-hidden">
       <div className="max-w-6xl mx-auto flex items-center gap-3">
         <span className="shrink-0 pl-5 py-2.5 text-base leading-none">📢</span>
         <div className="flex-1 min-w-0 overflow-hidden py-2.5">
-          <div className="whitespace-nowrap inline-block animate-notice-marquee font-medium text-sm">
+          <div
+            className="whitespace-nowrap inline-block animate-notice-marquee font-medium text-sm"
+            style={{ animationDuration: `${duration}s` }}
+          >
             {combinedText}
           </div>
         </div>

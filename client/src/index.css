@@ -30,7 +30,10 @@ h1, h2, h3, h4 {
 }
 
 .animate-notice-marquee {
-  animation: notice-marquee 30s linear infinite;
+  animation-name: notice-marquee;
+  animation-duration: 35s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 .animate-notice-marquee:hover {
