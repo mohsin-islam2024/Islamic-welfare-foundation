@@ -4,7 +4,7 @@ import { requireAuth, requireAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
 
-const BD_PHONE = /^01[3-9]\d{9}$/;
+const BD_PHONE = /^01[3-9]\d{8}$/;
 const TRX_ID = /^[A-Z0-9]{6,20}$/;
 const STATUSES = ["pending", "confirmed", "not_received", "cancelled"];
 
