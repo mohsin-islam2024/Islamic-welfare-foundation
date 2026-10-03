@@ -9,21 +9,24 @@ const router = express.Router();
 // Admin only: dashboard summary stats
 router.get("/summary", requireAuth, requireAdmin, async (req, res) => {
   try {
-    const [totalDonationsAgg, pendingLoans, unreadMessages, donationCount, loanCount] =
+    const [totalDonationsAgg, pendingLoans, unreadMessages, donationCount, pendingDonations, loanCount] =
       await Promise.all([
+        // শুধু যাচাইকৃত (confirmed) দান যোগ হবে
         Donation.aggregate([
-          { $match: { status: { $ne: "cancelled" } } },
+          { $match: { status: "confirmed" } },
           { $group: { _id: null, total: { $sum: "$amount" } } },
         ]),
         LoanApplication.countDocuments({ status: { $in: ["জমা হয়েছে", "পর্যালোচনাধীন"] } }),
         ContactMessage.countDocuments({ read: false }),
         Donation.countDocuments(),
+        Donation.countDocuments({ status: "pending" }),
         LoanApplication.countDocuments(),
       ]);
 
     res.json({
       totalDonationAmount: totalDonationsAgg[0]?.total || 0,
       donationCount,
+      pendingDonations,
       loanCount,
       pendingLoans,
       unreadMessages,

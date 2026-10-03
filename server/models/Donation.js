@@ -12,14 +12,28 @@ const donationSchema = new mongoose.Schema(
       default: "সাধারণ দান",
     },
     note: { type: String, trim: true, maxlength: 1000 },
+
+    // --- Mobile banking payment info ---
+    paymentMethod: { type: String, enum: ["bkash", "nagad"], required: true },
+    senderNumber: { type: String, required: true, trim: true }, // যে নম্বর থেকে টাকা পাঠানো হয়েছে
+    trxId: { type: String, required: true, trim: true, uppercase: true },
+
     status: {
       type: String,
-      enum: ["pending", "confirmed", "cancelled"],
+      // pending = যাচাই বাকি, confirmed = টাকা পাওয়া গেছে (valid),
+      // not_received = টাকা পাওয়া যায়নি (invalid), cancelled = বাতিল
+      enum: ["pending", "confirmed", "not_received", "cancelled"],
       default: "pending",
     },
     submittedByUid: { type: String }, // Firebase UID if logged in, optional
   },
   { timestamps: true }
+);
+
+// একই TrxID দিয়ে দ্বিতীয়বার জমা দেওয়া ঠেকাতে (পুরনো ডেটায় trxId নেই, তাই partial index)
+donationSchema.index(
+  { trxId: 1 },
+  { unique: true, partialFilterExpression: { trxId: { $type: "string" } } }
 );
 
 export default mongoose.model("Donation", donationSchema);

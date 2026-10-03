@@ -220,8 +220,9 @@ function SummaryTab() {
   if (!summary) return <PageLoading />;
 
   const cards = [
-    ["মোট দানের পরিমাণ", `${summary.totalDonationAmount.toLocaleString("bn-BD")} টাকা`],
+    ["নিশ্চিত দানের পরিমাণ", `${summary.totalDonationAmount.toLocaleString("bn-BD")} টাকা`],
     ["মোট দান সংখ্যা", summary.donationCount],
+    ["যাচাই অপেক্ষমান দান", summary.pendingDonations],
     ["মোট ঋণ আবেদন", summary.loanCount],
     ["অপেক্ষমান ঋণ আবেদন", summary.pendingLoans],
     ["না পড়া বার্তা", summary.unreadMessages],
@@ -426,66 +427,177 @@ function LoansTab() {
   );
 }
 
-const donationStatuses = ["pending", "confirmed", "cancelled"];
-const donationStatusLabel = { pending: "অপেক্ষমান", confirmed: "নিশ্চিত", cancelled: "বাতিল" };
+const donationStatusLabel = {
+  pending: "যাচাই অপেক্ষমান",
+  confirmed: "টাকা পাওয়া গেছে (Valid)",
+  not_received: "টাকা পাওয়া যায়নি",
+  cancelled: "বাতিল",
+};
+const donationStatusStyle = {
+  pending: "bg-gold/20 text-gold-dark",
+  confirmed: "bg-forest/15 text-forest",
+  not_received: "bg-clay/15 text-clay",
+  cancelled: "bg-ink/10 text-ink/60",
+};
+const methodLabel = { bkash: "বিকাশ", nagad: "নগদ" };
 
 function DonationsTab() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [query, setQuery] = useState("");
+  const [checking, setChecking] = useState(false);
+  const [checkResult, setCheckResult] = useState(null); // { donation } | { notFound: true, trxId }
+  const [filter, setFilter] = useState("all");
+
   useEffect(() => {
     api.getDonations().then(setItems).catch((e) => setError(e.message)).finally(() => setLoading(false));
   }, []);
 
+  const applyStatus = (id, status) => {
+    setItems((prev) => prev.map((i) => (i._id === id ? { ...i, status } : i)));
+    setCheckResult((r) => (r?.donation?._id === id ? { donation: { ...r.donation, status } } : r));
+  };
+
   const updateStatus = async (id, status) => {
     try {
       await api.updateDonationStatus(id, status);
-      setItems((prev) => prev.map((i) => (i._id === id ? { ...i, status } : i)));
+      applyStatus(id, status);
     } catch (e) {
       alert(e.message);
     }
   };
 
+  const handleCheck = async (e) => {
+    e.preventDefault();
+    const trxId = query.trim().toUpperCase();
+    if (!trxId) return;
+    setChecking(true);
+    setCheckResult(null);
+    try {
+      const donation = await api.checkDonationByTrx(trxId);
+      setCheckResult({ donation });
+    } catch {
+      setCheckResult({ notFound: true, trxId });
+    } finally {
+      setChecking(false);
+    }
+  };
+
   if (loading) return <PageLoading />;
   if (error) return <p className="text-clay text-sm">{error}</p>;
-  if (items.length === 0) return <p className="text-ink/50">কোনো দান পাওয়া যায়নি।</p>;
+
+  const visible = filter === "all" ? items : items.filter((i) => i.status === filter);
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="text-left text-ink/50 border-b border-line">
-            <th className="py-2 pr-4">দাতা</th>
-            <th className="py-2 pr-4">খাত</th>
-            <th className="py-2 pr-4">পরিমাণ</th>
-            <th className="py-2 pr-4">অবস্থা</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((d) => (
-            <tr key={d._id} className="border-b border-line/60">
-              <td className="py-3 pr-4">
-                <div className="font-medium text-ink">{d.donorName}</div>
-                <div className="text-xs text-ink/50">{d.phone}</div>
-              </td>
-              <td className="py-3 pr-4">{d.category}</td>
-              <td className="py-3 pr-4">{d.amount.toLocaleString("bn-BD")} টাকা</td>
-              <td className="py-3 pr-4">
-                <select
-                  className="input !w-auto !py-1.5 text-xs"
-                  value={d.status}
-                  onChange={(e) => updateStatus(d._id, e.target.value)}
-                >
-                  {donationStatuses.map((s) => (
-                    <option key={s} value={s}>{donationStatusLabel[s]}</option>
-                  ))}
-                </select>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-8">
+      {/* TrxID checker */}
+      <div className="card">
+        <h3 className="font-semibold text-forest mb-1">TrxID যাচাই করুন</h3>
+        <p className="text-xs text-ink/55 mb-4 leading-relaxed">
+          আপনার বিকাশ/নগদ অ্যাপ বা SMS-এ প্রাপ্ত TrxID এখানে লিখুন। জমা দেওয়া তথ্যের সাথে পরিমাণ ও
+          প্রেরকের নম্বর মিলে গেলে &quot;টাকা পাওয়া গেছে&quot; চাপুন, না মিললে &quot;টাকা পাওয়া যায়নি&quot; চাপুন।
+        </p>
+        <form onSubmit={handleCheck} className="flex gap-3">
+          <input
+            className="input uppercase"
+            placeholder="TrxID লিখুন"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            autoComplete="off"
+          />
+          <button type="submit" className="btn-primary whitespace-nowrap" disabled={checking}>
+            {checking ? "খোঁজা হচ্ছে..." : "যাচাই"}
+          </button>
+        </form>
+
+        {checkResult?.notFound && (
+          <div className="mt-4 rounded-md bg-clay/10 border border-clay/30 p-4 text-sm text-clay font-medium">
+            &quot;{checkResult.trxId}&quot; — এই TrxID দিয়ে কোনো দান জমা পড়েনি। টাকা পাওয়া যায়নি / Invalid।
+          </div>
+        )}
+
+        {checkResult?.donation && (
+          <div className="mt-4 rounded-md bg-white border border-line p-4">
+            <DonationDetails d={checkResult.donation} onUpdate={updateStatus} />
+          </div>
+        )}
+      </div>
+
+      {/* List */}
+      <div>
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h3 className="font-semibold text-forest">সকল দান ({visible.length})</h3>
+          <select className="input !w-auto !py-1.5 text-sm" value={filter} onChange={(e) => setFilter(e.target.value)}>
+            <option value="all">সব অবস্থা</option>
+            {Object.entries(donationStatusLabel).map(([k, v]) => (
+              <option key={k} value={k}>{v}</option>
+            ))}
+          </select>
+        </div>
+
+        {visible.length === 0 ? (
+          <p className="text-ink/50">কোনো দান পাওয়া যায়নি।</p>
+        ) : (
+          <div className="space-y-3">
+            {visible.map((d) => (
+              <div key={d._id} className="card">
+                <DonationDetails d={d} onUpdate={updateStatus} />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function DonationDetails({ d, onUpdate }) {
+  return (
+    <div>
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
+        <div>
+          <p className="font-semibold text-ink">{d.donorName}</p>
+          <p className="text-xs text-ink/50">{d.phone}</p>
+        </div>
+        <span className={`text-xs font-semibold px-3 py-1 rounded-full ${donationStatusStyle[d.status] || "bg-ink/10"}`}>
+          {donationStatusLabel[d.status] || d.status}
+        </span>
+      </div>
+
+      <dl className="grid sm:grid-cols-2 gap-x-6 gap-y-1 text-sm text-ink/75 mb-4">
+        <div><dt className="inline text-ink/50">পরিমাণ: </dt><dd className="inline font-semibold">{d.amount.toLocaleString("bn-BD")} টাকা</dd></div>
+        <div><dt className="inline text-ink/50">খাত: </dt><dd className="inline">{d.category}</dd></div>
+        <div><dt className="inline text-ink/50">মাধ্যম: </dt><dd className="inline">{methodLabel[d.paymentMethod] || "—"}</dd></div>
+        <div><dt className="inline text-ink/50">প্রেরকের নম্বর: </dt><dd className="inline">{d.senderNumber || "—"}</dd></div>
+        <div className="sm:col-span-2"><dt className="inline text-ink/50">TrxID: </dt><dd className="inline font-mono font-semibold">{d.trxId || "—"}</dd></div>
+        {d.note && <div className="sm:col-span-2"><dt className="inline text-ink/50">মন্তব্য: </dt><dd className="inline">{d.note}</dd></div>}
+      </dl>
+
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => onUpdate(d._id, "confirmed")}
+          disabled={d.status === "confirmed"}
+          className="text-xs font-semibold rounded px-3 py-1.5 bg-forest text-canvas hover:bg-forest-light disabled:opacity-40 transition-colors"
+        >
+          টাকা পাওয়া গেছে
+        </button>
+        <button
+          onClick={() => onUpdate(d._id, "not_received")}
+          disabled={d.status === "not_received"}
+          className="text-xs font-semibold rounded px-3 py-1.5 bg-clay text-white hover:opacity-90 disabled:opacity-40 transition-opacity"
+        >
+          টাকা পাওয়া যায়নি
+        </button>
+        <button
+          onClick={() => onUpdate(d._id, "pending")}
+          disabled={d.status === "pending"}
+          className="text-xs font-semibold rounded px-3 py-1.5 border border-line text-ink/70 hover:bg-ink/5 disabled:opacity-40 transition-colors"
+        >
+          অপেক্ষমান রাখুন
+        </button>
+      </div>
     </div>
   );
 }
