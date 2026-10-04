@@ -3,8 +3,10 @@ import { api } from "../lib/api";
 import { socket } from "../lib/socket";
 import { useAuth } from "../context/AuthContext";
 import { PageLoading } from "../components/RouteGuards";
+import GalleryAdminTab from "../components/admin/GalleryAdminTab";
+import BlogAdminTab from "../components/admin/BlogAdminTab";
 
-const TABS = ["সারাংশ", "লাইভ চ্যাট", "নোটিশ", "ঋণ আবেদন", "দান", "বার্তা"];
+const TABS = ["সারাংশ", "লাইভ চ্যাট", "নোটিশ", "গ্যালারি", "ব্লগ", "ঋণ আবেদন", "দান", "বার্তা"];
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState(TABS[0]);
@@ -31,6 +33,8 @@ export default function AdminDashboard() {
       {tab === "সারাংশ" && <SummaryTab />}
       {tab === "লাইভ চ্যাট" && <ChatAdminTab />}
       {tab === "নোটিশ" && <NoticesTab />}
+      {tab === "গ্যালারি" && <GalleryAdminTab />}
+      {tab === "ব্লগ" && <BlogAdminTab />}
       {tab === "ঋণ আবেদন" && <LoansTab />}
       {tab === "দান" && <DonationsTab />}
       {tab === "বার্তা" && <MessagesTab />}

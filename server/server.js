@@ -1,9 +1,9 @@
+import "dotenv/config";
 import express from "express";
 import http from "http";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
 
 import { connectDB } from "./config/db.js";
@@ -15,7 +15,11 @@ import noticeRoutes from "./routes/notices.js";
 import chatRoutes from "./routes/chat.js";
 import { initSocket } from "./socket.js";
 
-dotenv.config();
+import uploadRoutes from "./routes/uploads.js";
+import galleryRoutes from "./routes/gallery.js";
+import blogRoutes from "./routes/blog.js";
+
+
 
 const app = express();
 
@@ -38,7 +42,7 @@ app.use(
       }
     },
     credentials: true,
-  })
+  }),
 );
 
 // Basic rate limiting to protect public POST endpoints from abuse
@@ -48,7 +52,10 @@ const publicLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-app.use(["/api/donations", "/api/loans", "/api/contact", "/api/chat"], publicLimiter);
+app.use(
+  ["/api/donations", "/api/loans", "/api/contact", "/api/chat"],
+  publicLimiter,
+);
 
 // --- Routes ---
 app.get("/api/health", (req, res) => {
@@ -61,6 +68,9 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/notices", noticeRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/uploads", uploadRoutes);
+app.use("/api/gallery", galleryRoutes);
+app.use("/api/blog", blogRoutes);
 
 // --- 404 handler ---
 app.use((req, res) => {
@@ -70,7 +80,9 @@ app.use((req, res) => {
 // --- Error handler ---
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(err.status || 500).json({ error: err.message || "সার্ভারে একটি সমস্যা হয়েছে।" });
+  res
+    .status(err.status || 500)
+    .json({ error: err.message || "সার্ভারে একটি সমস্যা হয়েছে।" });
 });
 
 const PORT = process.env.PORT || 5000;

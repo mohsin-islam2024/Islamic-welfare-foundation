@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import GallerySection from "../components/GallerySection";
+import BlogSection from "../components/BlogSection";
 
 const pillars = [
   { title: "কর্জে হাসানাহ", desc: "ব্যবসা, শিক্ষা, চিকিৎসা ও জরুরি প্রয়োজনে সম্পূর্ণ সুদমুক্ত ঋণ।" },
@@ -23,7 +25,7 @@ export default function Home() {
             আল্লাহর সন্তুষ্টির জন্য, মানুষের কল্যাণে।
           </h1>
           <p className="mt-6 max-w-xl text-ink/70 text-lg leading-relaxed">
-            আল-ইনফাক ফাউন্ডেশন একটি ইসলামিক সামাজিক কল্যাণ সংস্থা — সুদমুক্ত ঋণ, চিকিৎসা ও শিক্ষা
+            আল-ইনফাক ফাউন্ডেশন একটি অরাজনৈতিক, অলাভজনক ও স্বেচ্ছাসেবী ইসলামিক মানবকল্যাণমূলক সংস্থা। — সুদমুক্ত ঋণ, চিকিৎসা ও শিক্ষা
             সহায়তা, এতিম-বিধবা সহায়তা এবং দুর্যোগকালীন ত্রাণের মাধ্যমে মানুষের পাশে দাঁড়ানোই আমাদের লক্ষ্য।
           </p>
           <div className="mt-9 flex flex-wrap gap-4">
@@ -36,6 +38,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <GallerySection />
 
       {/* Principles strip */}
       <section className="bg-forest text-canvas">
@@ -95,6 +98,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <BlogSection />
 
       {/* CTA */}
       <section className="max-w-6xl mx-auto px-5 py-20 text-center">
