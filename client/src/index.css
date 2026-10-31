@@ -44,6 +44,11 @@
   }
 }
 
+@keyframes slide-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -167,6 +172,13 @@
   }
   .marquee-reverse .marquee-track {
     animation-direction: reverse;
+  }
+  /* গ্যালারি স্লাইডারের অগ্রগতি বার */
+  .slide-progress {
+    transform-origin: left;
+    animation-name: slide-progress;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
   }
   .marquee-mask {
     -webkit-mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
