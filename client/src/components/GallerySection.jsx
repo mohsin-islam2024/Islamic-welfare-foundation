@@ -48,7 +48,7 @@ export default function GallerySection() {
         </h2>
       </div>
 
-      {/* প্রথম ছবি মিহরাব-ধাঁচের খিলানে, বড় আকারে; বাকিগুলো সমান ঘরে */}
+      {/* প্রথম ছবি বড় আকারে (উপরে হালকা খিলানের আভাস, ছবির মুখ যেন না কাটে); বাকিগুলো সমান ঘরে */}
       <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[9.5rem] md:auto-rows-[13rem] gap-3 md:gap-4">
         {visible.map((item, i) => (
           <button
@@ -57,14 +57,14 @@ export default function GallerySection() {
             onClick={() => setSelected(i)}
             aria-label={item.caption || "ছবি বড় করে দেখুন"}
             className={`group relative overflow-hidden bg-forest/10 ${
-              i === 0 ? "col-span-2 row-span-2 rounded-t-[999px] rounded-b-2xl" : "rounded-2xl"
+              i === 0 ? "col-span-2 row-span-2 rounded-t-[3.5rem] rounded-b-2xl" : "rounded-2xl"
             }`}
           >
             <img
               src={optimizeImage(item.imageUrl, i === 0 ? 1000 : 600)}
               alt={item.caption || "গ্যালারির ছবি"}
               loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className="h-full w-full object-cover object-[50%_30%] transition-transform duration-700 group-hover:scale-105"
             />
             {item.caption && (
               <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-forest-dark/85 to-transparent px-4 pb-4 pt-12 text-left text-sm leading-6 text-canvas opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">

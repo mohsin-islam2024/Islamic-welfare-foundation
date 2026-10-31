@@ -44,6 +44,11 @@
   }
 }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
 @keyframes notice-marquee {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
@@ -52,6 +57,15 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-notice-marquee {
     animation: none;
+  }
+  .marquee-track {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .marquee-dup {
+    display: none;
   }
 }
 
@@ -142,6 +156,20 @@
 }
 
 @layer utilities {
+  /* ---------- মূলনীতির মার্কি ---------- */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 60s linear infinite;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+  }
+
   /* নোটিশ বার (NoticeBar.jsx) — আগের index.css থেকে অপরিবর্তিত */
   .animate-notice-marquee {
     animation-name: notice-marquee;

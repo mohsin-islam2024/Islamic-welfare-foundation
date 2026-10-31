@@ -46,8 +46,8 @@ export default function Home() {
       {/* ───────── Hero ───────── */}
       <section className="relative isolate overflow-hidden bg-forest-dark text-canvas">
         <div className="absolute inset-0 -z-20 bg-hero-glow" />
-        <div className="absolute inset-0 -z-10 bg-islamic-pattern bg-pattern-size [mask-image:linear-gradient(to_bottom,black,transparent_85%)] [-webkit-mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
-        <HeroOrnament className="absolute -right-56 top-[42%] -z-10 w-[44rem] max-w-none -translate-y-1/2 opacity-35 lg:-right-28 lg:w-[42rem] lg:opacity-100" />
+        <div className="absolute inset-0 -z-10 bg-islamic-pattern bg-pattern-size opacity-50 lg:opacity-100 [mask-image:linear-gradient(to_bottom,black,transparent_85%)] [-webkit-mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
+        <HeroOrnament className="absolute -right-56 top-[42%] -z-10 w-[44rem] max-w-none -translate-y-1/2 opacity-[0.12] sm:opacity-20 lg:-right-28 lg:w-[42rem] lg:opacity-100" />
 
         <div className="relative max-w-6xl mx-auto px-5 pt-24 pb-20 md:pt-32 md:pb-28">
           <p className="rise text-gold-light text-sm font-medium" style={{ animationDelay: "0ms" }}>
@@ -68,12 +68,12 @@ export default function Home() {
             মানুষের পাশে দাঁড়ানোই আমাদের লক্ষ্য।
           </p>
 
-          <div className="rise mt-10 flex flex-wrap gap-4" style={{ animationDelay: "400ms" }}>
-            <Link to="/donate" className="btn-gold">দান করুন</Link>
-            <Link to="/loan-application" className="btn-light">কর্জে হাসানাহর জন্য আবেদন</Link>
+          <div className="rise mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4" style={{ animationDelay: "400ms" }}>
+            <Link to="/donate" className="btn-gold w-full sm:w-auto">দান করুন</Link>
+            <Link to="/loan-application" className="btn-light w-full sm:w-auto">কর্জে হাসানাহর জন্য আবেদন</Link>
           </div>
 
-          <ul className="rise mt-14 flex flex-wrap gap-x-9 gap-y-3 text-sm text-canvas/70" style={{ animationDelay: "540ms" }}>
+          <ul className="rise mt-12 flex flex-col gap-3 pr-16 text-sm text-canvas/75 sm:mt-14 sm:flex-row sm:flex-wrap sm:gap-x-9 sm:pr-0" style={{ animationDelay: "540ms" }}>
             {trust.map((t) => (
               <li key={t} className="flex items-center gap-2">
                 <Icon name="check" className="w-4 h-4 text-gold-light" strokeWidth={2.2} />
@@ -83,15 +83,25 @@ export default function Home() {
           </ul>
         </div>
 
-        {/* মূলনীতি */}
-        <div className="border-t border-white/10 bg-black/15">
-          <div className="max-w-6xl mx-auto px-5 py-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-medium text-canvas/85">
-            {principles.map((p, i) => (
-              <span key={p} className="flex items-center gap-6">
-                {i !== 0 && <StarMark className="w-2.5 h-2.5 text-gold-light hidden md:block" />}
-                {p}
-              </span>
-            ))}
+        {/* মূলনীতি — ধীর গতির মার্কি; হোভার করলে থামে, reduced-motion-এ স্থির */}
+        <div className="marquee relative border-t border-gold-light/20 bg-black/20 py-6 md:py-7" aria-label="আমাদের মূলনীতি">
+          <div className="marquee-mask overflow-hidden">
+            <div className="marquee-track">
+              {[0, 1].map((g) => (
+                <ul
+                  key={g}
+                  className={`flex shrink-0 items-center ${g === 1 ? "marquee-dup" : ""}`}
+                  aria-hidden={g === 1 ? "true" : undefined}
+                >
+                  {[...principles, ...principles].map((p, i) => (
+                    <li key={`${g}-${i}`} className="flex items-center">
+                      <span className="whitespace-nowrap px-7 font-headline text-xl text-canvas/90 md:px-10 md:text-2xl">{p}</span>
+                      <StarMark className="h-3 w-3 shrink-0 text-gold-light md:h-3.5 md:w-3.5" />
+                    </li>
+                  ))}
+                </ul>
+              ))}
+            </div>
           </div>
         </div>
       </section>
