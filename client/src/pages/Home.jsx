@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Icon, Medallion, StarMark, HeroOrnament } from "../components/ornaments";
+import { Icon, Medallion, HeroOrnament } from "../components/ornaments";
+import PrinciplesMarquee from "../components/PrinciplesMarquee";
 import GallerySection from "../components/GallerySection";
 import BlogSection from "../components/BlogSection";
 
@@ -11,8 +12,6 @@ const programs = [
   { icon: "lifebuoy", title: "দুর্যোগকালীন ত্রাণ", desc: "বন্যা, ঘূর্ণিঝড় ও অন্যান্য দুর্যোগে জরুরি ত্রাণ কার্যক্রম।" },
   { icon: "gift", title: "যাকাত ও ওয়াকফ ব্যবস্থাপনা", desc: "শরিয়াহ অনুযায়ী স্বচ্ছভাবে যাকাত ও ওয়াকফ পরিচালনা।" },
 ];
-
-const principles = ["আল্লাহভীতি", "সততা", "আমানতদারিতা", "স্বচ্ছতা", "জবাবদিহিতা", "ন্যায়বিচার"];
 
 const trust = ["শরিয়াহসম্মত বৈধ উৎস থেকে দান", "পাঁচ সদস্যের ঋণ কমিটি", "ছয় মাসে হিসাব প্রকাশ"];
 
@@ -33,7 +32,6 @@ const donationCategories = [
   "যাকাত",
   "সদকা",
   "কর্জে হাসানাহ তহবিল",
-  "কুরবানির চামড়া",
   "শিক্ষা সহায়তা",
   "চিকিৎসা সহায়তা",
   "দুর্যোগ ত্রাণ",
@@ -43,6 +41,9 @@ const donationCategories = [
 export default function Home() {
   return (
     <div>
+      {/* নেভবারের ঠিক নিচে: ডান থেকে বামে */}
+      <PrinciplesMarquee position="top" />
+
       {/* ───────── Hero ───────── */}
       <section className="relative isolate overflow-hidden bg-forest-dark text-canvas">
         <div className="absolute inset-0 -z-20 bg-hero-glow" />
@@ -83,27 +84,8 @@ export default function Home() {
           </ul>
         </div>
 
-        {/* মূলনীতি — ধীর গতির মার্কি; হোভার করলে থামে, reduced-motion-এ স্থির */}
-        <div className="marquee relative border-t border-gold-light/20 bg-black/20 py-6 md:py-7" aria-label="আমাদের মূলনীতি">
-          <div className="marquee-mask overflow-hidden">
-            <div className="marquee-track">
-              {[0, 1].map((g) => (
-                <ul
-                  key={g}
-                  className={`flex shrink-0 items-center ${g === 1 ? "marquee-dup" : ""}`}
-                  aria-hidden={g === 1 ? "true" : undefined}
-                >
-                  {[...principles, ...principles].map((p, i) => (
-                    <li key={`${g}-${i}`} className="flex items-center">
-                      <span className="whitespace-nowrap px-7 font-headline text-xl text-canvas/90 md:px-10 md:text-2xl">{p}</span>
-                      <StarMark className="h-3 w-3 shrink-0 text-gold-light md:h-3.5 md:w-3.5" />
-                    </li>
-                  ))}
-                </ul>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* হিরোর নিচে: বাম থেকে ডানে */}
+        <PrinciplesMarquee reverse />
       </section>
 
       {/* ───────── গ্যালারি ───────── */}

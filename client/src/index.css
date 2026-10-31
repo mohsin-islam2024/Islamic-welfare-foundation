@@ -165,6 +165,9 @@
   .marquee:hover .marquee-track {
     animation-play-state: paused;
   }
+  .marquee-reverse .marquee-track {
+    animation-direction: reverse;
+  }
   .marquee-mask {
     -webkit-mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
     mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
