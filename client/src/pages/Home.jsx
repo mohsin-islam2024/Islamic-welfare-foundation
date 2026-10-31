@@ -1,116 +1,218 @@
 import { Link } from "react-router-dom";
+import { Icon, Medallion, StarMark, HeroOrnament } from "../components/ornaments";
 import GallerySection from "../components/GallerySection";
 import BlogSection from "../components/BlogSection";
 
-const pillars = [
-  { title: "কর্জে হাসানাহ", desc: "ব্যবসা, শিক্ষা, চিকিৎসা ও জরুরি প্রয়োজনে সম্পূর্ণ সুদমুক্ত ঋণ।" },
-  { title: "চিকিৎসা সহায়তা", desc: "অসহায় রোগীদের চিকিৎসা ব্যয় বহনে পাশে থাকা।" },
-  { title: "শিক্ষা সহায়তা", desc: "দরিদ্র মেধাবী শিক্ষার্থীদের পড়াশোনা চালিয়ে যাওয়ার সুযোগ।" },
-  { title: "এতিম ও বিধবা সহায়তা", desc: "নিয়মিত ভরণপোষণ ও প্রয়োজনীয় সহায়তা প্রদান।" },
-  { title: "দুর্যোগকালীন ত্রাণ", desc: "বন্যা, ঘূর্ণিঝড় ও অন্যান্য দুর্যোগে জরুরি ত্রাণ কার্যক্রম।" },
-  { title: "যাকাত ও ওয়াকফ ব্যবস্থাপনা", desc: "শরিয়াহ অনুযায়ী স্বচ্ছভাবে যাকাত ও ওয়াকফ পরিচালনা।" },
+const programs = [
+  { icon: "shield", title: "কর্জে হাসানাহ", desc: "ব্যবসা, শিক্ষা, চিকিৎসা ও জরুরি প্রয়োজনে সম্পূর্ণ সুদমুক্ত ঋণ।", to: "/loan-application", cta: "আবেদন করুন" },
+  { icon: "pulse", title: "চিকিৎসা সহায়তা", desc: "অসহায় রোগীদের চিকিৎসা ব্যয় বহনে পাশে থাকা।" },
+  { icon: "book", title: "শিক্ষা সহায়তা", desc: "দরিদ্র মেধাবী শিক্ষার্থীদের পড়াশোনা চালিয়ে যাওয়ার সুযোগ।" },
+  { icon: "users", title: "এতিম ও বিধবা সহায়তা", desc: "নিয়মিত ভরণপোষণ ও প্রয়োজনীয় সহায়তা প্রদান।" },
+  { icon: "lifebuoy", title: "দুর্যোগকালীন ত্রাণ", desc: "বন্যা, ঘূর্ণিঝড় ও অন্যান্য দুর্যোগে জরুরি ত্রাণ কার্যক্রম।" },
+  { icon: "gift", title: "যাকাত ও ওয়াকফ ব্যবস্থাপনা", desc: "শরিয়াহ অনুযায়ী স্বচ্ছভাবে যাকাত ও ওয়াকফ পরিচালনা।" },
 ];
 
 const principles = ["আল্লাহভীতি", "সততা", "আমানতদারিতা", "স্বচ্ছতা", "জবাবদিহিতা", "ন্যায়বিচার"];
 
+const trust = ["শরিয়াহসম্মত বৈধ উৎস থেকে দান", "পাঁচ সদস্যের ঋণ কমিটি", "ছয় মাসে হিসাব প্রকাশ"];
+
+const loanPoints = [
+  "সম্পূর্ণ সুদমুক্ত, কোনো লুকানো চার্জ নেই",
+  "কোনো সার্ভিস চার্জ বা অতিরিক্ত অর্থ নেই",
+  "প্রয়োজনে কিস্তিতে পরিশোধের সুযোগ",
+  "আর্থিক সংকটে মানবিক বিবেচনা",
+];
+
+const loanSteps = [
+  { title: "নিবন্ধন করে আবেদন করুন", desc: "ঋণের উদ্দেশ্য, প্রয়োজনীয় পরিমাণ ও পরিশোধ পরিকল্পনা জানিয়ে আবেদন জমা দিন।" },
+  { title: "কমিটির স্বচ্ছ মূল্যায়ন", desc: "পাঁচ সদস্যের ঋণ কমিটি প্রতিটি আবেদন যাচাই করে সিদ্ধান্ত নেয়।" },
+  { title: "অবস্থা দেখুন, কিস্তিতে শোধ করুন", desc: "ড্যাশবোর্ডে আবেদনের অবস্থা ও কমিটির মন্তব্য দেখতে পাবেন।" },
+];
+
+const donationCategories = [
+  "যাকাত",
+  "সদকা",
+  "কর্জে হাসানাহ তহবিল",
+  "কুরবানির চামড়া",
+  "শিক্ষা সহায়তা",
+  "চিকিৎসা সহায়তা",
+  "দুর্যোগ ত্রাণ",
+  "সাধারণ দান",
+];
+
 export default function Home() {
   return (
     <div>
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-line">
-        <div className="absolute inset-0 bg-lattice bg-lattice-size opacity-40 pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-5 pt-16 pb-20 md:pt-24 md:pb-28 relative">
-          <p className="eyebrow mb-4">প্রতিষ্ঠিত জয়পুরহাট সদর, জয়পুরহাট</p>
-          <h1 className="text-4xl md:text-6xl font-semibold text-forest max-w-3xl leading-[1.15]">
-            আল্লাহর সন্তুষ্টির জন্য, মানুষের কল্যাণে।
-          </h1>
-          <p className="mt-6 max-w-xl text-ink/70 text-lg leading-relaxed">
-            আল-ইনফাক ফাউন্ডেশন একটি অরাজনৈতিক, অলাভজনক ও স্বেচ্ছাসেবী ইসলামিক মানবকল্যাণমূলক সংস্থা। — সুদমুক্ত ঋণ, চিকিৎসা ও শিক্ষা
-            সহায়তা, এতিম-বিধবা সহায়তা এবং দুর্যোগকালীন ত্রাণের মাধ্যমে মানুষের পাশে দাঁড়ানোই আমাদের লক্ষ্য।
+      {/* ───────── Hero ───────── */}
+      <section className="relative isolate overflow-hidden bg-forest-dark text-canvas">
+        <div className="absolute inset-0 -z-20 bg-hero-glow" />
+        <div className="absolute inset-0 -z-10 bg-islamic-pattern bg-pattern-size [mask-image:linear-gradient(to_bottom,black,transparent_85%)] [-webkit-mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
+        <HeroOrnament className="absolute -right-56 top-[42%] -z-10 w-[44rem] max-w-none -translate-y-1/2 opacity-35 lg:-right-28 lg:w-[42rem] lg:opacity-100" />
+
+        <div className="relative max-w-6xl mx-auto px-5 pt-24 pb-20 md:pt-32 md:pb-28">
+          <p className="rise text-gold-light text-sm font-medium" style={{ animationDelay: "0ms" }}>
+            জয়পুরহাট সদর, জয়পুরহাট
           </p>
-          <div className="mt-9 flex flex-wrap gap-4">
-            <Link to="/donate" className="btn-primary">
-              দান করুন
-            </Link>
-            <Link to="/loan-application" className="btn-secondary">
-              কর্জে হাসানাহর জন্য আবেদন করুন
-            </Link>
+
+          <h1
+            className="rise mt-5 font-headline font-normal text-[2.5rem] sm:text-6xl lg:text-7xl leading-[1.3] max-w-3xl"
+            style={{ animationDelay: "120ms" }}
+          >
+            আল্লাহর সন্তুষ্টির জন্য,
+            <br className="hidden sm:block" /> মানুষের কল্যাণে।
+          </h1>
+
+          <p className="rise mt-7 max-w-xl text-lg leading-8 text-canvas/75" style={{ animationDelay: "260ms" }}>
+            আল-ইনফাক ফাউন্ডেশন একটি অরাজনৈতিক, অলাভজনক ও স্বেচ্ছাসেবী ইসলামিক মানবকল্যাণমূলক সংস্থা।
+            সুদমুক্ত ঋণ, চিকিৎসা ও শিক্ষা সহায়তা, এতিম-বিধবা সহায়তা এবং দুর্যোগকালীন ত্রাণের মাধ্যমে
+            মানুষের পাশে দাঁড়ানোই আমাদের লক্ষ্য।
+          </p>
+
+          <div className="rise mt-10 flex flex-wrap gap-4" style={{ animationDelay: "400ms" }}>
+            <Link to="/donate" className="btn-gold">দান করুন</Link>
+            <Link to="/loan-application" className="btn-light">কর্জে হাসানাহর জন্য আবেদন</Link>
+          </div>
+
+          <ul className="rise mt-14 flex flex-wrap gap-x-9 gap-y-3 text-sm text-canvas/70" style={{ animationDelay: "540ms" }}>
+            {trust.map((t) => (
+              <li key={t} className="flex items-center gap-2">
+                <Icon name="check" className="w-4 h-4 text-gold-light" strokeWidth={2.2} />
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* মূলনীতি */}
+        <div className="border-t border-white/10 bg-black/15">
+          <div className="max-w-6xl mx-auto px-5 py-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-medium text-canvas/85">
+            {principles.map((p, i) => (
+              <span key={p} className="flex items-center gap-6">
+                {i !== 0 && <StarMark className="w-2.5 h-2.5 text-gold-light hidden md:block" />}
+                {p}
+              </span>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* ───────── গ্যালারি ───────── */}
       <GallerySection />
 
-      {/* Principles strip */}
-      <section className="bg-forest text-canvas">
-        <div className="max-w-6xl mx-auto px-5 py-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-          {principles.map((p, i) => (
-            <span key={p} className="text-sm font-medium flex items-center gap-2">
-              {i !== 0 && <span className="w-1 h-1 rounded-full bg-gold-light hidden md:inline-block -ml-4 mr-4" />}
-              {p}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {/* Programs */}
-      <section className="max-w-6xl mx-auto px-5 py-20">
-        <p className="eyebrow mb-3">আমাদের কার্যক্রম</p>
-        <h2 className="text-3xl md:text-4xl font-semibold text-ink mb-12 max-w-2xl">
-          যেভাবে আমরা মানুষের পাশে দাঁড়াই
-        </h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {pillars.map((p) => (
-            <div key={p.title} className="card hover:border-gold/60 hover:shadow-sm transition-all">
-              <h3 className="font-display font-semibold text-lg text-forest mb-2">{p.title}</h3>
-              <p className="text-sm text-ink/65 leading-relaxed">{p.desc}</p>
-            </div>
-          ))}
-        </div>
-        <div className="mt-10">
-          <Link to="/programs" className="text-forest font-semibold hover:underline">
-            সকল কার্যক্রম বিস্তারিত দেখুন →
-          </Link>
-        </div>
-      </section>
-
-      {/* Qard Hasan callout */}
-      <section className="bg-gold/10 border-y border-gold/20">
-        <div className="max-w-6xl mx-auto px-5 py-16 grid md:grid-cols-2 gap-10 items-center">
-          <div>
-            <p className="eyebrow mb-3">কর্জে হাসানাহ</p>
-            <h2 className="text-3xl font-semibold text-ink mb-4">সুদমুক্ত ঋণ, সম্মানের সাথে</h2>
-            <p className="text-ink/70 leading-relaxed mb-6">
-              ব্যবসা, শিক্ষা, চিকিৎসা, কৃষিকাজ বা জরুরি পারিবারিক প্রয়োজনে আমরা সম্পূর্ণ সুদমুক্ত ঋণ
-              প্রদান করি। কোনো সার্ভিস চার্জ নেই, কোনো অতিরিক্ত অর্থ নেই — শুধু আল্লাহর সন্তুষ্টির
-              জন্য।
+      {/* ───────── কার্যক্রম ───────── */}
+      <section className="max-w-6xl mx-auto px-5 py-24">
+        <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-14 lg:gap-20">
+          <div className="lg:sticky lg:top-28 self-start">
+            <h2 className="font-headline font-normal text-4xl md:text-5xl text-forest leading-[1.3]">
+              যেভাবে আমরা মানুষের পাশে দাঁড়াই
+            </h2>
+            <p className="mt-6 text-ink/65 leading-8 max-w-md">
+              প্রতিটি খাতে সহায়তা পৌঁছানোর আগে আমরা প্রকৃত প্রয়োজন যাচাই করি, যাতে আপনার দান ঠিক
+              জায়গায় পৌঁছায়।
             </p>
-            <Link to="/loan-application" className="btn-primary">
-              আবেদন করুন
-            </Link>
+            <Link to="/programs" className="btn-secondary mt-9">সকল কার্যক্রম দেখুন</Link>
           </div>
-          <div className="card bg-white">
-            <ul className="space-y-3 text-sm text-ink/75">
-              <li className="flex gap-2"><span className="text-gold-dark font-bold">✓</span> সম্পূর্ণ সুদমুক্ত, কোনো লুকানো চার্জ নেই</li>
-              <li className="flex gap-2"><span className="text-gold-dark font-bold">✓</span> পাঁচ সদস্যের ঋণ কমিটির স্বচ্ছ মূল্যায়ন</li>
-              <li className="flex gap-2"><span className="text-gold-dark font-bold">✓</span> প্রয়োজনে কিস্তিতে পরিশোধের সুযোগ</li>
-              <li className="flex gap-2"><span className="text-gold-dark font-bold">✓</span> আর্থিক সংকটে মানবিক বিবেচনা</li>
-            </ul>
+
+          <ul>
+            {programs.map((p) => (
+              <li key={p.title} className="flex gap-5 py-7 border-t border-line last:border-b">
+                <Medallion icon={p.icon} />
+                <div>
+                  <h3 className="font-display font-semibold text-xl text-forest">{p.title}</h3>
+                  <p className="mt-1.5 text-ink/65 leading-7">{p.desc}</p>
+                  {p.to && (
+                    <Link to={p.to} className="mt-3 inline-block text-sm font-semibold text-gold-dark hover:underline">
+                      {p.cta}
+                    </Link>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ───────── কর্জে হাসানাহ ───────── */}
+      <section className="px-5">
+        <div className="relative isolate max-w-6xl mx-auto overflow-hidden rounded-[2rem] bg-forest text-canvas shadow-panel">
+          <div className="absolute inset-0 -z-10 bg-islamic-pattern bg-pattern-size opacity-70 [mask-image:linear-gradient(120deg,black,transparent_60%)] [-webkit-mask-image:linear-gradient(120deg,black,transparent_60%)]" />
+
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 p-8 md:p-14">
+            <div>
+              <h2 className="font-headline font-normal text-4xl md:text-5xl leading-[1.3]">
+                সুদমুক্ত ঋণ, সম্মানের সাথে
+              </h2>
+              <p className="mt-6 text-canvas/75 leading-8 max-w-md">
+                ব্যবসা, শিক্ষা, চিকিৎসা, কৃষিকাজ বা জরুরি পারিবারিক প্রয়োজনে আমরা সম্পূর্ণ সুদমুক্ত
+                ঋণ প্রদান করি। শুধু আল্লাহর সন্তুষ্টির জন্য।
+              </p>
+
+              <ul className="mt-8 space-y-3">
+                {loanPoints.map((t) => (
+                  <li key={t} className="flex items-start gap-3 text-canvas/90">
+                    <Icon name="check" className="w-5 h-5 mt-1 shrink-0 text-gold-light" strokeWidth={2.2} />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+
+              <Link to="/loan-application" className="btn-gold mt-10">আবেদন করুন</Link>
+            </div>
+
+            <ol className="relative self-center">
+              <span className="absolute left-[1.15rem] top-3 bottom-3 w-px bg-gradient-to-b from-gold-light/60 via-gold-light/30 to-transparent" aria-hidden="true" />
+              {loanSteps.map((s, i) => (
+                <li key={s.title} className="relative flex gap-5 pb-9 last:pb-0">
+                  <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold-light/60 bg-forest-dark font-display font-semibold text-gold-light">
+                    {["১", "২", "৩"][i]}
+                  </span>
+                  <div>
+                    <h3 className="font-display font-semibold text-lg">{s.title}</h3>
+                    <p className="mt-1.5 text-canvas/70 leading-7">{s.desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
+
+      {/* ───────── ব্লগ ───────── */}
       <BlogSection />
 
-      {/* CTA */}
-      <section className="max-w-6xl mx-auto px-5 py-20 text-center">
-        <h2 className="text-3xl md:text-4xl font-semibold text-forest mb-4">
-          আপনার সহায়তা বদলে দিতে পারে একটি জীবন
-        </h2>
-        <p className="text-ink/70 max-w-xl mx-auto mb-8">
-          যাকাত, সদকা বা সাধারণ দান — যেভাবেই আপনি এগিয়ে আসুন, তা পৌঁছে যাবে প্রকৃত প্রয়োজনের কাছে।
-        </p>
-        <Link to="/donate" className="btn-primary">
-          এখনই দান করুন
-        </Link>
+      {/* ───────── দান ───────── */}
+      <section className="max-w-6xl mx-auto px-5 py-24">
+        <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-center rounded-[2rem] border border-gold/30 bg-gradient-to-br from-gold/15 via-gold/5 to-transparent p-8 md:p-14">
+          <div>
+            <h2 className="font-headline font-normal text-4xl md:text-5xl text-forest leading-[1.3]">
+              আপনার সহায়তা বদলে দিতে পারে একটি জীবন
+            </h2>
+            <p className="mt-6 text-ink/70 leading-8 max-w-lg">
+              বিকাশ বা নগদে সরাসরি Send Money করে TrxID জমা দিন। আমরা যাচাই করে দান নিশ্চিত করি এবং
+              প্রকৃত প্রয়োজনে পৌঁছে দিই।
+            </p>
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <Link to="/donate" className="btn-primary">এখনই দান করুন</Link>
+              <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink/80">
+                <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#E2136E" }} /> বিকাশ
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink/80">
+                <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#F6921E" }} /> নগদ
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-forest mb-4">যেসব খাতে দান করা যায়</p>
+            <div className="flex flex-wrap gap-2.5">
+              {donationCategories.map((c) => (
+                <span key={c} className="rounded-full border border-forest/20 bg-white/70 px-4 py-2 text-sm text-forest">
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );

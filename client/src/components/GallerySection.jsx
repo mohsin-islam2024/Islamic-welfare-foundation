@@ -7,7 +7,7 @@ const INITIAL_COUNT = 8;
 export default function GallerySection() {
   const [items, setItems] = useState([]);
   const [showAll, setShowAll] = useState(false);
-  const [selected, setSelected] = useState(null); // index in visible list
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     api.getGallery().then(setItems).catch(() => {});
@@ -41,31 +41,42 @@ export default function GallerySection() {
   const current = selected !== null ? visible[selected] : null;
 
   return (
-    <section className="max-w-6xl mx-auto px-5 py-20">
-      <p className="eyebrow mb-3">ফটো গ্যালারি</p>
-      <h2 className="text-3xl md:text-4xl font-semibold text-ink mb-10">আমাদের কার্যক্রমের কিছু মুহূর্ত</h2>
+    <section className="max-w-6xl mx-auto px-5 pt-24">
+      <div className="mb-12 max-w-2xl">
+        <h2 className="font-headline font-normal text-4xl md:text-5xl text-forest leading-[1.3]">
+          আমাদের কার্যক্রমের কিছু মুহূর্ত
+        </h2>
+      </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {/* প্রথম ছবি মিহরাব-ধাঁচের খিলানে, বড় আকারে; বাকিগুলো সমান ঘরে */}
+      <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[9.5rem] md:auto-rows-[13rem] gap-3 md:gap-4">
         {visible.map((item, i) => (
           <button
             key={item._id}
             type="button"
             onClick={() => setSelected(i)}
-            className="group relative aspect-square overflow-hidden rounded-lg border border-line bg-white"
             aria-label={item.caption || "ছবি বড় করে দেখুন"}
+            className={`group relative overflow-hidden bg-forest/10 ${
+              i === 0 ? "col-span-2 row-span-2 rounded-t-[999px] rounded-b-2xl" : "rounded-2xl"
+            }`}
           >
             <img
-              src={optimizeImage(item.imageUrl, 500)}
+              src={optimizeImage(item.imageUrl, i === 0 ? 1000 : 600)}
               alt={item.caption || "গ্যালারির ছবি"}
               loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
+            {item.caption && (
+              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-forest-dark/85 to-transparent px-4 pb-4 pt-12 text-left text-sm leading-6 text-canvas opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                {item.caption}
+              </span>
+            )}
           </button>
         ))}
       </div>
 
       {items.length > INITIAL_COUNT && (
-        <div className="mt-8 text-center">
+        <div className="mt-10 text-center">
           <button type="button" className="btn-secondary" onClick={() => setShowAll((s) => !s)}>
             {showAll ? "কম দেখুন" : `সব ছবি দেখুন (${items.length})`}
           </button>
@@ -74,7 +85,7 @@ export default function GallerySection() {
 
       {current && (
         <div
-          className="fixed inset-0 z-[60] bg-black/85 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-forest-dark/95 p-4"
           onClick={close}
           role="dialog"
           aria-modal="true"
@@ -82,7 +93,7 @@ export default function GallerySection() {
           <button
             type="button"
             onClick={close}
-            className="absolute top-4 right-4 text-white text-3xl leading-none px-3"
+            className="absolute right-4 top-4 px-3 text-3xl leading-none text-white"
             aria-label="বন্ধ করুন"
           >
             ×
@@ -92,7 +103,7 @@ export default function GallerySection() {
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); prev(); }}
-                className="absolute left-3 md:left-6 text-white text-4xl px-3"
+                className="absolute left-3 px-3 text-4xl text-white md:left-6"
                 aria-label="আগের ছবি"
               >
                 ‹
@@ -100,21 +111,21 @@ export default function GallerySection() {
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); next(); }}
-                className="absolute right-3 md:right-6 text-white text-4xl px-3"
+                className="absolute right-3 px-3 text-4xl text-white md:right-6"
                 aria-label="পরের ছবি"
               >
                 ›
               </button>
             </>
           )}
-          <figure className="max-w-4xl max-h-full" onClick={(e) => e.stopPropagation()}>
+          <figure className="max-h-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
             <img
               src={optimizeImage(current.imageUrl, 1600)}
               alt={current.caption || "গ্যালারির ছবি"}
-              className="max-h-[80vh] mx-auto rounded"
+              className="mx-auto max-h-[80vh] rounded-lg"
             />
             {current.caption && (
-              <figcaption className="text-center text-white/90 text-sm mt-3">{current.caption}</figcaption>
+              <figcaption className="mt-4 text-center text-sm leading-7 text-white/90">{current.caption}</figcaption>
             )}
           </figure>
         </div>

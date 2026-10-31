@@ -1,28 +1,27 @@
 import { Link } from "react-router-dom";
 import { optimizeImage } from "../lib/upload";
 
+// /blog পেজের গ্রিডে ব্যবহৃত স্ট্যান্ডার্ড কার্ড
 export default function BlogCard({ post }) {
   return (
-    <Link
-      to={`/blog/${post._id}`}
-      className="card !p-0 overflow-hidden flex flex-col hover:border-gold/60 hover:shadow-sm transition-all"
-    >
-      {post.coverImage ? (
-        <img
-          src={optimizeImage(post.coverImage, 600)}
-          alt=""
-          loading="lazy"
-          className="w-full aspect-[16/9] object-cover"
-        />
-      ) : (
-        <div className="w-full aspect-[16/9] bg-forest/5" />
-      )}
-      <div className="p-5 flex-1 flex flex-col">
-        <p className="text-xs text-ink/45 mb-2">{new Date(post.createdAt).toLocaleDateString("bn-BD")}</p>
-        <h3 className="font-display font-semibold text-lg text-forest mb-2 leading-snug">{post.title}</h3>
-        {post.excerpt && <p className="text-sm text-ink/65 leading-relaxed">{post.excerpt}</p>}
-        <span className="mt-auto pt-4 text-sm font-semibold text-forest">পড়ুন →</span>
+    <Link to={`/blog/${post._id}`} className="group flex flex-col">
+      <div className="overflow-hidden rounded-2xl border border-line bg-forest/5">
+        {post.coverImage ? (
+          <img
+            src={optimizeImage(post.coverImage, 700)}
+            alt=""
+            loading="lazy"
+            className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="aspect-[16/10] w-full" />
+        )}
       </div>
+      <p className="mt-5 text-xs text-ink/45">{new Date(post.createdAt).toLocaleDateString("bn-BD")}</p>
+      <h3 className="mt-1.5 font-display text-xl font-semibold leading-snug text-forest group-hover:underline decoration-gold decoration-2 underline-offset-4">
+        {post.title}
+      </h3>
+      {post.excerpt && <p className="mt-2 text-sm leading-7 text-ink/65">{post.excerpt}</p>}
     </Link>
   );
 }

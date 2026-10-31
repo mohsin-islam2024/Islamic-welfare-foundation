@@ -2,48 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
 
-body {
-  @apply bg-canvas text-ink font-body antialiased;
-}
+  body {
+    @apply bg-canvas text-ink font-body antialiased;
+    text-rendering: optimizeLegibility;
+  }
 
-h1, h2, h3, h4 {
-  @apply font-display;
-}
+  /* বাংলা হরফে letter-spacing দেওয়া হয়নি (যুক্তাক্ষর ভেঙে যায়); লাইন-হাইট একটু বেশি */
+  h1, h2, h3, h4 {
+    @apply font-display;
+    line-height: 1.35;
+  }
 
-::selection {
-  background: #D9A94F;
-  color: #1B2E28;
-}
+  ::selection {
+    background: #E3B85C;
+    color: #0A2219;
+  }
 
-:focus-visible {
-  outline: 2px solid #B8862E;
-  outline-offset: 2px;
-}
+  :focus-visible {
+    outline: 2px solid #B8862E;
+    outline-offset: 3px;
+  }
 
-@keyframes notice-marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
-
-.animate-notice-marquee {
-  animation-name: notice-marquee;
-  animation-duration: 35s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-.animate-notice-marquee:hover {
-  animation-play-state: paused;
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #FBF8F2; }
+  ::-webkit-scrollbar-thumb { background: #D8CFB6; border-radius: 999px; border: 2px solid #FBF8F2; }
+  ::-webkit-scrollbar-thumb:hover { background: #B8862E; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-notice-marquee {
-    animation: none;
-  }
   * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -52,26 +44,121 @@ h1, h2, h3, h4 {
   }
 }
 
-.eyebrow {
-  @apply text-gold-dark tracking-[0.2em] text-xs font-semibold uppercase;
+@keyframes notice-marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
 }
 
-.btn-primary {
-  @apply inline-flex items-center justify-center rounded-md bg-forest px-6 py-3 text-canvas font-semibold hover:bg-forest-light transition-colors;
+@media (prefers-reduced-motion: reduce) {
+  .animate-notice-marquee {
+    animation: none;
+  }
 }
 
-.btn-secondary {
-  @apply inline-flex items-center justify-center rounded-md border border-forest px-6 py-3 text-forest font-semibold hover:bg-forest hover:text-canvas transition-colors;
+@layer components {
+  /* ছোট ঠিকানা-সূচক লেবেল: শুধু যেখানে সত্যিই দরকার সেখানে ব্যবহার করুন */
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-gold-dark text-sm font-semibold;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: linear-gradient(90deg, #B8862E, transparent);
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn-primary,
+  .btn-secondary,
+  .btn-gold,
+  .btn-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 font-semibold transition-all duration-300 ease-out;
+  }
+  .btn-primary:disabled,
+  .btn-secondary:disabled,
+  .btn-gold:disabled,
+  .btn-light:disabled {
+    @apply opacity-60 cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply text-canvas;
+    background: linear-gradient(180deg, #1F5A44 0%, #14392B 100%);
+    box-shadow: 0 10px 24px -12px rgba(20, 57, 43, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px -12px rgba(20, 57, 43, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  }
+
+  .btn-secondary {
+    @apply text-forest;
+    border: 1.5px solid #14392B;
+  }
+  .btn-secondary:hover:not(:disabled) {
+    @apply bg-forest text-canvas;
+  }
+
+  .btn-gold {
+    color: #0A2219;
+    background: linear-gradient(180deg, #EBC672 0%, #C99A3C 100%);
+    box-shadow: 0 12px 28px -12px rgba(184, 134, 46, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  }
+  .btn-gold:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 34px -12px rgba(184, 134, 46, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+
+  /* গাঢ় ব্যাকগ্রাউন্ডের উপরে */
+  .btn-light {
+    @apply text-canvas;
+    border: 1.5px solid rgba(251, 248, 242, 0.35);
+  }
+  .btn-light:hover:not(:disabled) {
+    background: rgba(251, 248, 242, 0.12);
+    border-color: rgba(251, 248, 242, 0.7);
+  }
+
+  /* ---------- Surfaces & forms ---------- */
+  .card {
+    @apply bg-white border border-line rounded-2xl p-6;
+    box-shadow: 0 1px 2px rgba(10, 34, 25, 0.04);
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-line bg-white px-4 py-3 text-ink outline-none transition-all duration-200;
+  }
+  .input::placeholder {
+    color: rgba(16, 36, 28, 0.4);
+  }
+  .input:focus {
+    border-color: #B8862E;
+    box-shadow: 0 0 0 4px rgba(227, 184, 92, 0.22);
+  }
+
+  .label {
+    @apply block text-sm font-medium text-ink/80 mb-1.5;
+  }
 }
 
-.card {
-  @apply bg-white/70 border border-line rounded-lg p-6;
-}
+@layer utilities {
+  /* নোটিশ বার (NoticeBar.jsx) — আগের index.css থেকে অপরিবর্তিত */
+  .animate-notice-marquee {
+    animation-name: notice-marquee;
+    animation-duration: 35s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .animate-notice-marquee:hover {
+    animation-play-state: paused;
+  }
 
-.input {
-  @apply w-full rounded-md border border-line bg-white px-4 py-2.5 text-ink placeholder:text-ink/40 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-colors;
-}
-
-.label {
-  @apply block text-sm font-medium text-ink/80 mb-1.5;
+  /* হিরো সেকশনের একবারের প্রবেশ-অ্যানিমেশন (delay inline style-এ দিন) */
+  .rise {
+    animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  /* SVG-এর ভেতরে ঘূর্ণনের কেন্দ্র ঠিক রাখতে */
+  .origin-svg-center {
+    transform-origin: 100px 100px;
+  }
 }
