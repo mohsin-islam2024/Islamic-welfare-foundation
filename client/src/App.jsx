@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import NoticeBar from "./components/NoticeBar";
 import ChatWidget from "./components/ChatWidget";
+import ScrollToTop from "./components/ScrollToTop";
 import { RequireAuth, RequireAdmin } from "./components/RouteGuards";
 
 import Home from "./pages/Home";
@@ -25,6 +26,7 @@ import Gallery from "./pages/Gallery";
 export default function App() {
   return (
     <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
       <NoticeBar />
       <Navbar />
       <main className="flex-1">
