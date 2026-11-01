@@ -19,6 +19,7 @@ const mobileLinks = [
   { to: "/programs", label: "কার্যক্রম" },
   { to: "/constitution", label: "নীতিমালা" },
   { to: "/notice-board", label: "নোটিশ বোর্ড" },
+  { to: "/gallery", label: "গ্যালারি" },
   { to: "/blog", label: "ব্লগ" },
   { to: "/loan-application", label: "কর্জে হাসানাহ" },
   { to: "/contact", label: "যোগাযোগ" },

@@ -42,6 +42,7 @@ export const api = {
 
   // Gallery & blog (public)
   getGallery: () => request("/api/gallery"),
+  getGalleryPage: (page = 1, limit = 24) => request(`/api/gallery?page=${page}&limit=${limit}`),
   getBlogPosts: (limit) => request(`/api/blog${limit ? `?limit=${limit}` : ""}`),
   getBlogPost: (id) => request(`/api/blog/${id}`),
 

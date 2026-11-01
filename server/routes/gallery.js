@@ -6,10 +6,25 @@ import { destroyImage } from "../utils/cloudinary.js";
 const router = express.Router();
 
 // Public: ছবির তালিকা (নতুন আগে)
+//  - ?page=1&limit=24 দিলে পাতা ভাগ করে { items, total, page, pages } ফেরত দেয়
+//  - কিছু না দিলে আগের মতো সব ছবির অ্যারে (অ্যাডমিন প্যানেল এটাই ব্যবহার করে)
 router.get("/", async (req, res) => {
   try {
-    const items = await GalleryItem.find().sort({ createdAt: -1 });
-    res.json(items);
+    const paginated = req.query.page !== undefined || req.query.limit !== undefined;
+    if (!paginated) {
+      return res.json(await GalleryItem.find().sort({ createdAt: -1 }));
+    }
+
+    const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 24, 1), 60);
+    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+    const [items, total] = await Promise.all([
+      GalleryItem.find()
+        .sort({ createdAt: -1, _id: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit),
+      GalleryItem.countDocuments(),
+    ]);
+    res.json({ items, total, page, pages: Math.ceil(total / limit) });
   } catch (err) {
     res.status(500).json({ error: "ছবি আনতে সমস্যা হয়েছে।" });
   }

@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../lib/api";
 import { optimizeImage } from "../lib/upload";
 
 const INTERVAL = 5500; // প্রতিটি ছবি কত মিলিসেকেন্ড থাকবে
+const HOME_COUNT = 12; // হোমে সর্বশেষ কয়টি ছবি স্লাইডারে দেখাবে; বাকিগুলো /gallery পেজে
 const bn = (n) => String(n).replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[d]);
 
 export default function GallerySection() {
   const [items, setItems] = useState([]);
+  const [total, setTotal] = useState(0);
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [inView, setInView] = useState(true);
@@ -24,7 +27,15 @@ export default function GallerySection() {
   const n = items.length;
 
   useEffect(() => {
-    api.getGallery().then(setItems).catch(() => {});
+    api
+      .getGalleryPage(1, HOME_COUNT)
+      .then((res) => {
+        // নতুন সার্ভার { items, total } দেয়; পুরনো সার্ভার সব ছবির অ্যারে দেয় — দুটোই চলে
+        const list = Array.isArray(res) ? res.slice(0, HOME_COUNT) : res.items;
+        setItems(list);
+        setTotal(Array.isArray(res) ? res.length : res.total);
+      })
+      .catch(() => {});
   }, []);
 
   const next = useCallback(() => setIndex((i) => (n ? (i + 1) % n : 0)), [n]);
@@ -228,6 +239,14 @@ export default function GallerySection() {
               <img src={optimizeImage(item.imageUrl, 240)} alt="" loading="lazy" className="h-full w-full object-cover" />
             </button>
           ))}
+        </div>
+      )}
+
+      {total > items.length && (
+        <div className="mt-8 text-center">
+          <Link to="/gallery" className="btn-secondary">
+            সব ছবি দেখুন ({bn(total)}টি)
+          </Link>
         </div>
       )}
 
